@@ -675,28 +675,26 @@ const TEMPLATES = [
       { key: 'experience', label: 'Experience',  placeholder: 'e.g. 2-4',  hint: 'Renders as "Experience: 2-4 Years"' },
       { key: 'email',      label: 'Contact Email', placeholder: 'yourname@tezo.com', hint: null },
     ],
-    // Text layers: positions relative to 1080×1350 canvas
+    // Text layers: positions from Figma (1080x1350 canvas)
     layers: [
       {
         key: 'role',
-        x: 204, y: 615, w: 672, h: 80,
-        font: 'Gilroy', weight: '500', size: 52,
-        align: 'center', baseline: 'top',
-        transform: null,
+        x: 271, y: 615,
+        font: 'Gilroy', weight: '500', size: 72,
+        align: 'center',
       },
       {
         key: 'experience',
-        x: 204, y: 700, w: 672, h: 50,
-        font: 'Gilroy', weight: '500', size: 34,
-        align: 'center', baseline: 'top',
+        x: 359, y: 696,
+        font: 'Gilroy', weight: '400', size: 40,
+        align: 'center',
         prefix: 'Experience: ', suffix: ' Years',
       },
       {
         key: 'email',
-        x: 204, y: 790, w: 672, h: 50,
-        font: 'Gilroy', weight: '500', size: 30,
-        align: 'center', baseline: 'top',
-        transform: null,
+        x: 395, y: 814,
+        font: 'Parkinsans', weight: '400', size: 28,
+        align: 'center',
       },
     ],
   },
@@ -991,7 +989,7 @@ async function generateImage() {
       ctx.fillStyle = variant.textColor;
       ctx.textAlign = layer.align || 'center';
       ctx.textBaseline = 'top';
-      ctx.font = `${layer.weight} ${layer.size}px "Gilroy", sans-serif`;
+      ctx.font = `${layer.weight} ${layer.size}px "${layer.font}", sans-serif`;
       ctx.letterSpacing = `${-0.03 * layer.size}px`;
 
       const cx = layer.align === 'center' ? layer.x + layer.w / 2 : layer.x;
