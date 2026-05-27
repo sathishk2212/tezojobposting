@@ -709,29 +709,25 @@ const TEMPLATES = [
   {
     id: 2,
     name: 'Minimal Drop',
-    positions: 1,
+    positions: 2,
     hasJD: false,
     variants: [
       { id: '2-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/2-1.png' },
       { id: '2-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/2-2.png' },
     ],
     fields: [
-      { key: 'role',  label: 'Job Role',     placeholder: 'e.g. Frontend Engineer', hint: null },
-      { key: 'email', label: 'Contact Email', placeholder: 'yourname@tezo.com',      hint: null },
+      { key: 'role1',       label: 'Job Role 1',    placeholder: 'e.g. Product Designer', hint: null },
+      { key: 'experience1', label: 'Experience 1',  placeholder: 'e.g. 1-2', hint: 'Renders as "Experience: 1-2 Years"' },
+      { key: 'role2',       label: 'Job Role 2',    placeholder: 'e.g. Marketing Lead',   hint: null },
+      { key: 'experience2', label: 'Experience 2',  placeholder: 'e.g. 3-5', hint: 'Renders as "Experience: 3-5 Years"' },
+      { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com',     hint: null },
     ],
     layers: [
-      {
-        key: 'role',
-        x: 204, y: 580, w: 672, h: 80,
-        font: 'Gilroy', weight: '500', size: 52,
-        align: 'center', baseline: 'top',
-      },
-      {
-        key: 'email',
-        x: 204, y: 700, w: 672, h: 50,
-        font: 'Gilroy', weight: '500', size: 30,
-        align: 'center', baseline: 'top',
-      },
+      { key: 'role1',       x: 72,  y: 550,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, w: 517 },
+      { key: 'experience1', x: 72,  y: 687,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
+      { key: 'role2',       x: 72,  y: 777,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, w: 517 },
+      { key: 'experience2', x: 72,  y: 914,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
+      { key: 'email',       x: 87,  y: 1151, font: 'Parkinsans', weight: '400', size: 38, align: 'left' },
     ],
   },
   {
@@ -981,6 +977,9 @@ async function generateImage() {
       document.fonts.load('500 72px "Gilroy"'),
       document.fonts.load('400 40px "Gilroy"'),
       document.fonts.load('400 28px "Parkinsans"'),
+      document.fonts.load('400 38px "Parkinsans"'),
+      document.fonts.load('500 56px "Gilroy"'),
+      document.fonts.load('400 40px "Gilroy"'),
     ]);
   } catch(e) { console.warn('Font preload warning:', e); }
 
@@ -1020,7 +1019,7 @@ async function generateImage() {
       ctx.font = `${layer.weight} ${sSize}px "${layer.font}", sans-serif`;
       ctx.letterSpacing = `${-0.03 * sSize}px`;
 
-      // For center-aligned text, always use canvas center (Figma text boxes are centered on 1080px frame)
+      // For center-aligned text use canvas center; for left-aligned use X directly
       const cx = layer.align === 'center' ? canvas.width / 2 : sx;
 
       if (layer.multiline) {
