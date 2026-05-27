@@ -679,20 +679,20 @@ const TEMPLATES = [
     layers: [
       {
         key: 'role',
-        x: 271, y: 615,
+        x: 271, y: 615, w: 538,
         font: 'Gilroy', weight: '500', size: 72,
         align: 'center',
       },
       {
         key: 'experience',
-        x: 359, y: 696,
+        x: 359, y: 696, w: 362,
         font: 'Gilroy', weight: '400', size: 40,
         align: 'center',
         prefix: 'Experience: ', suffix: ' Years',
       },
       {
         key: 'email',
-        x: 395, y: 814,
+        x: 395, y: 814, w: 291,
         font: 'Parkinsans', weight: '400', size: 28,
         align: 'center',
       },
@@ -1012,8 +1012,8 @@ async function generateImage() {
       ctx.font = `${layer.weight} ${sSize}px "${layer.font}", sans-serif`;
       ctx.letterSpacing = `${-0.03 * sSize}px`;
 
-      // cx: for center align, use the X as the center point directly
-      const cx = sx;
+      // For center-aligned text, always use canvas center (Figma text boxes are centered on 1080px frame)
+      const cx = layer.align === 'center' ? canvas.width / 2 : sx;
 
       if (layer.multiline) {
         const words = text.split(' ');
