@@ -967,47 +967,68 @@ async function generateImage() {
   btn.textContent = 'Generating…';
   btn.disabled = true;
 
-  await document.fonts.ready;
+  // Force-load all required fonts before drawing to canvas
+  try {
+    await Promise.all([
+      document.fonts.load('500 72px "Gilroy"'),
+      document.fonts.load('400 40px "Gilroy"'),
+      document.fonts.load('400 28px "Parkinsans"'),
+    ]);
+  } catch(e) { console.warn('Font preload warning:', e); }
 
   canvas.width = CANVAS_W;
   canvas.height = CANVAS_H;
 
   const img = new Image();
   img.onload = () => {
-    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-    ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
+    // Use actual image dimensions so coordinates scale correctly
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+
+    // Scale factors: Figma frame is 1080wide, canvas matches actual image size
+    const scaleX = canvas.width / CANVAS_W;
+    const scaleY = canvas.height / CANVAS_H;
 
     t.layers.forEach(layer => {
       const raw = values[layer.key] || '';
+      console.log('Drawing layer:', layer.key, '=', raw, 'at scaled', Math.round(layer.x*scaleX), Math.round(layer.y*scaleY));
       if (!raw) return;
 
       let text = raw;
       if (layer.prefix) text = layer.prefix + text;
       if (layer.suffix) text = text + layer.suffix;
 
+      const sx = layer.x * scaleX;
+      const sy = layer.y * scaleY;
+      const sSize = layer.size * scaleX;
+      const sMaxW = (layer.w || CANVAS_W - layer.x * 2) * scaleX;
+
       ctx.save();
       ctx.fillStyle = variant.textColor;
       ctx.textAlign = layer.align || 'center';
       ctx.textBaseline = 'top';
-      ctx.font = `${layer.weight} ${layer.size}px "${layer.font}", sans-serif`;
-      ctx.letterSpacing = `${-0.03 * layer.size}px`;
+      ctx.font = `${layer.weight} ${sSize}px "${layer.font}", sans-serif`;
+      ctx.letterSpacing = `${-0.03 * sSize}px`;
 
-      const cx = layer.align === 'center' ? layer.x + layer.w / 2 : layer.x;
+      // cx: for center align, use the X as the center point directly
+      const cx = sx;
 
       if (layer.multiline) {
         const words = text.split(' ');
-        const lineHeight = layer.size * 1.45;
-        let line = '', lineY = layer.y;
+        const lineHeight = sSize * 1.45;
+        let line = '', lineY = sy;
         words.forEach((word, wi) => {
           const test = line + (line ? ' ' : '') + word;
-          if (ctx.measureText(test).width > layer.w && line) {
+          if (ctx.measureText(test).width > sMaxW && line) {
             ctx.fillText(line, cx, lineY);
             line = word; lineY += lineHeight;
           } else { line = test; }
           if (wi === words.length - 1) ctx.fillText(line, cx, lineY);
         });
       } else {
-        ctx.fillText(text, cx, layer.y);
+        ctx.fillText(text, cx, sy);
       }
       ctx.restore();
     });
