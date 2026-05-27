@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tezo — Hiring Template Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+
+  @font-face { font-family: 'Gilroy'; font-weight: 100; src: url('fonts/Gilroy-Thin.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 200; src: url('fonts/Gilroy-UltraLight.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 300; src: url('fonts/Gilroy-Light.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 400; src: url('fonts/Gilroy-Regular.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 500; src: url('fonts/Gilroy-Medium.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 600; src: url('fonts/Gilroy-SemiBold.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 700; src: url('fonts/Gilroy-Bold.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 800; src: url('fonts/Gilroy-ExtraBold.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 900; src: url('fonts/Gilroy-Black.woff2') format('woff2'); }
+  @font-face { font-family: 'Gilroy'; font-weight: 950; src: url('fonts/Gilroy-Heavy.woff2') format('woff2'); }
+  @font-face { font-family: 'Parkinsans'; font-weight: 300; src: url('fonts/Parkinsans-Light.woff2') format('woff2'); }
+  @font-face { font-family: 'Parkinsans'; font-weight: 400; src: url('fonts/Parkinsans-Regular.woff2') format('woff2'); }
+  @font-face { font-family: 'Parkinsans'; font-weight: 500; src: url('fonts/Parkinsans-Medium.woff2') format('woff2'); }
+  @font-face { font-family: 'Parkinsans'; font-weight: 600; src: url('fonts/Parkinsans-SemiBold.woff2') format('woff2'); }
+  @font-face { font-family: 'Parkinsans'; font-weight: 700; src: url('fonts/Parkinsans-Bold.woff2') format('woff2'); }
+  @font-face { font-family: 'Parkinsans'; font-weight: 800; src: url('fonts/Parkinsans-ExtraBold.woff2') format('woff2'); }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0c0e;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0efe8;
+    --text-muted: #6b6a65;
+    --text-dim: #9e9d96;
+    --accent: #e83a5a;
+    --accent2: #5b4ef8;
+    --accent-glow: rgba(232,58,90,0.15);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(232,58,90,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%;
+    right: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(91,78,248,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Header ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(12,12,14,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .header-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Main layout ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── Page title ── */
+  .page-title {
+    margin-bottom: 40px;
+  }
+  .page-title h1 {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.8px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .page-title h1 span { color: var(--accent); }
+  .page-title p {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* ── Filters ── */
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    margin-right: 4px;
+  }
+  .chip {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--border-hover); color: var(--text); }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(232,58,90,0.3);
+  }
+  .chip-check {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    margin-left: 8px;
+  }
+  .chip-check:hover { border-color: var(--border-hover); color: var(--text); }
+  .chip-check.active {
+    border-color: var(--accent2);
+    color: var(--text);
+    background: rgba(91,78,248,0.1);
+  }
+  .chip-check .box {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .chip-check.active .box {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .chip-check .box::after {
+    content: '';
+    width: 7px; height: 5px;
+    border-left: 1.5px solid #fff;
+    border-bottom: 1.5px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .chip-check.active .box::after { opacity: 1; }
+  .divider-v {
+    width: 1px; height: 20px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+
+  /* ── Template Grid ── */
+  .templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .template-card {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .template-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .template-card.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 12px 40px rgba(232,58,90,0.15);
+  }
+  .template-thumb {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+    background: var(--surface2);
+  }
+  .template-thumb-placeholder {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .template-info {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .template-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .template-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .template-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.3px;
+  }
+  .badge-roles-1 { background: rgba(232,58,90,0.12); color: #e8647a; }
+  .badge-roles-2 { background: rgba(91,78,248,0.12); color: #8b82f8; }
+  .badge-roles-3 { background: rgba(60,180,120,0.12); color: #5cb88a; }
+  .selected-check {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: none;
+    align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .selected-check svg { width: 12px; height: 12px; }
+  .template-card.selected .selected-check { display: flex; }
+  .color-dots {
+    display: flex; gap: 4px;
+  }
+  .color-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .color-dot:hover { transform: scale(1.3); }
+  .color-dot.active { border-color: #fff; }
+
+  .hidden { display: none !important; }
+
+  /* ── Slide-in Editor Panel ── */
+  .editor-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .editor-overlay.open {
+    pointer-events: all;
+    opacity: 1;
+  }
+  .editor-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+  .editor-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    padding: 28px 32px 36px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .editor-overlay.open .editor-panel {
+    transform: translateY(0);
+  }
+  .editor-handle {
+    width: 40px; height: 4px;
+    background: var(--border-hover);
+    border-radius: 2px;
+    margin: 0 auto 24px;
+  }
+  .editor-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .editor-title {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+  }
+  .editor-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .close-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .close-btn:hover { color: var(--text); border-color: var(--border-hover); }
+
+  /* ── Form ── */
+  .form-field {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+  .form-input::placeholder { color: var(--text-muted); }
+  .form-input:focus { border-color: var(--accent); }
+  .form-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* variant selector inside panel */
+  .variant-row {
+    display: flex; gap: 10px; margin-bottom: 20px;
+  }
+  .variant-btn {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 8px;
+    justify-content: center;
+  }
+  .variant-btn:hover { border-color: var(--border-hover); color: var(--text); }
+  .variant-btn.active {
+    border-color: var(--accent);
+    color: var(--text);
+    background: rgba(232,58,90,0.08);
+  }
+  .variant-swatch {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Generate button */
+  .generate-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius);
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(232,58,90,0.3);
+  }
+  .generate-btn:hover {
+    background: #d42f4e;
+    box-shadow: 0 4px 28px rgba(232,58,90,0.45);
+    transform: translateY(-1px);
+  }
+  .generate-btn:active { transform: translateY(0); }
+  .generate-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ── Preview Modal ── */
+  .preview-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .preview-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .preview-box {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+  }
+  .preview-image {
+    width: 100%;
+    border-radius: var(--radius);
+    display: block;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  }
+  .preview-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .download-btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: var(--radius);
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 4px 16px rgba(232,58,90,0.3);
+  }
+  .download-btn:hover { background: #d42f4e; }
+  .back-btn {
+    padding: 13px 20px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .back-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* hidden canvas */
+  #renderCanvas { display: none; }
+
+  /* empty state */
+  .empty-state {
+    grid-column: 1/-1;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Tezo Hiring
+  </div>
+  <span class="header-label">Template Generator</span>
+</header>
+
+<main>
+  <div class="page-title">
+    <h1>Generate a <span>Hiring Post</span></h1>
+    <p>Pick a template, fill in the details, download in seconds.</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <span class="filter-label">openings</span>
+    <button class="chip active" data-filter="all">All</button>
+    <button class="chip" data-filter="1">1 Position</button>
+    <button class="chip" data-filter="2">2 Positions</button>
+    <button class="chip" data-filter="3">3 Positions</button>
+    <div class="divider-v"></div>
+    <button class="chip-check" id="jdFilter">
+      <span class="box"></span>
+      Job Description
+    </button>
+  </div>
+
+  <!-- Grid -->
+  <div class="templates-grid" id="templatesGrid"></div>
+</main>
+
+<!-- Editor Panel -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor-backdrop" id="editorBackdrop"></div>
+  <div class="editor-panel">
+    <div class="editor-handle"></div>
+    <div class="editor-header">
+      <div>
+        <div class="editor-title" id="panelTitle">Template 1</div>
+        <div class="editor-subtitle" id="panelSubtitle">1 open position · No job description</div>
+      </div>
+      <button class="close-btn" id="closeEditor">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Colour variant -->
+    <div style="margin-bottom:20px;">
+      <div class="form-label">Colour Variant</div>
+      <div class="variant-row">
+        <button class="variant-btn active" data-variant="1">
+          <span class="variant-swatch" style="background:#e8c9a0;"></span>
+          Warm Beige
+        </button>
+        <button class="variant-btn" data-variant="2">
+          <span class="variant-swatch" style="background:#2a2a35;"></span>
+          Dark
+        </button>
+      </div>
+    </div>
+
+    <!-- Dynamic fields -->
+    <div id="formFields"></div>
+
+    <button class="generate-btn" id="generateBtn">Generate Image →</button>
+  </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="preview-overlay" id="previewOverlay">
+  <div class="preview-box">
+    <img class="preview-image" id="previewImg" src="" alt="Generated hiring post">
+    <div class="preview-actions">
+      <button class="download-btn" id="downloadBtn">⬇ Download PNG</button>
+      <button class="back-btn" id="closePreview">← Back</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="renderCanvas"></canvas>
+
+<script>
+// ─── Template definitions ───────────────────────────────────────────────────
+// Figma canvas: ~1080px wide (standard social). We'll use 1080x1350 (4:5).
+// All Figma coords assumed from a 1080-wide frame.
+// Y positions scaled: Figma showed Y:615 on ~1350px tall frame.
+
+const CANVAS_W = 1080;
+const CANVAS_H = 1350;
+
+const TEMPLATES = [
+  {
+    id: 1,
+    name: 'Classic Chair',
+    positions: 1,
+    hasJD: false,
+    variants: [
+      { id: '1-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/1-1.png' },
+      { id: '1-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/1-2.png' },
+    ],
+    fields: [
+      { key: 'role',       label: 'Job Role',    placeholder: 'e.g. Product Designer', hint: null },
+      { key: 'experience', label: 'Experience',  placeholder: 'e.g. 2-4',  hint: 'Renders as "Experience: 2-4 Years"' },
+      { key: 'email',      label: 'Contact Email', placeholder: 'yourname@tezo.com', hint: null },
+    ],
+    // Text layers: positions relative to 1080×1350 canvas
+    layers: [
+      {
+        key: 'role',
+        x: 204, y: 615, w: 672, h: 80,
+        font: 'Gilroy', weight: '500', size: 52,
+        align: 'center', baseline: 'top',
+        transform: null,
+      },
+      {
+        key: 'experience',
+        x: 204, y: 700, w: 672, h: 50,
+        font: 'Gilroy', weight: '500', size: 34,
+        align: 'center', baseline: 'top',
+        prefix: 'Experience: ', suffix: ' Years',
+      },
+      {
+        key: 'email',
+        x: 204, y: 790, w: 672, h: 50,
+        font: 'Gilroy', weight: '500', size: 30,
+        align: 'center', baseline: 'top',
+        transform: null,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Minimal Drop',
+    positions: 1,
+    hasJD: false,
+    variants: [
+      { id: '2-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/2-1.png' },
+      { id: '2-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/2-2.png' },
+    ],
+    fields: [
+      { key: 'role',  label: 'Job Role',     placeholder: 'e.g. Frontend Engineer', hint: null },
+      { key: 'email', label: 'Contact Email', placeholder: 'yourname@tezo.com',      hint: null },
+    ],
+    layers: [
+      {
+        key: 'role',
+        x: 204, y: 580, w: 672, h: 80,
+        font: 'Gilroy', weight: '500', size: 52,
+        align: 'center', baseline: 'top',
+      },
+      {
+        key: 'email',
+        x: 204, y: 700, w: 672, h: 50,
+        font: 'Gilroy', weight: '500', size: 30,
+        align: 'center', baseline: 'top',
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Double Role',
+    positions: 2,
+    hasJD: false,
+    variants: [
+      { id: '3-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/3-1.png' },
+      { id: '3-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/3-2.png' },
+    ],
+    fields: [
+      { key: 'role1',       label: 'Job Role 1',    placeholder: 'e.g. Product Designer', hint: null },
+      { key: 'experience1', label: 'Experience 1',  placeholder: 'e.g. 2-4',  hint: 'Renders as "Experience: 2-4 Years"' },
+      { key: 'role2',       label: 'Job Role 2',    placeholder: 'e.g. Marketing Lead',   hint: null },
+      { key: 'experience2', label: 'Experience 2',  placeholder: 'e.g. 3-5',  hint: 'Renders as "Experience: 3-5 Years"' },
+      { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com',     hint: null },
+    ],
+    layers: [
+      { key: 'role1',       x: 204, y: 520, w: 672, h: 60, font: 'Gilroy', weight: '500', size: 44, align: 'center', baseline: 'top' },
+      { key: 'experience1', x: 204, y: 590, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 28, align: 'center', baseline: 'top', prefix: 'Experience: ', suffix: ' Years' },
+      { key: 'role2',       x: 204, y: 660, w: 672, h: 60, font: 'Gilroy', weight: '500', size: 44, align: 'center', baseline: 'top' },
+      { key: 'experience2', x: 204, y: 730, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 28, align: 'center', baseline: 'top', prefix: 'Experience: ', suffix: ' Years' },
+      { key: 'email',       x: 204, y: 810, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 26, align: 'center', baseline: 'top' },
+    ],
+  },
+  {
+    id: 4,
+    name: 'Triple Roles',
+    positions: 3,
+    hasJD: false,
+    variants: [
+      { id: '4-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/4-1.png' },
+      { id: '4-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/4-2.png' },
+    ],
+    fields: [
+      { key: 'role1', label: 'Job Role 1', placeholder: 'e.g. Product Designer', hint: null },
+      { key: 'role2', label: 'Job Role 2', placeholder: 'e.g. Marketing Lead',   hint: null },
+      { key: 'role3', label: 'Job Role 3', placeholder: 'e.g. Backend Engineer', hint: null },
+      { key: 'email', label: 'Contact Email', placeholder: 'yourname@tezo.com',  hint: null },
+    ],
+    layers: [
+      { key: 'role1', x: 204, y: 500, w: 672, h: 55, font: 'Gilroy', weight: '500', size: 42, align: 'center', baseline: 'top' },
+      { key: 'role2', x: 204, y: 580, w: 672, h: 55, font: 'Gilroy', weight: '500', size: 42, align: 'center', baseline: 'top' },
+      { key: 'role3', x: 204, y: 660, w: 672, h: 55, font: 'Gilroy', weight: '500', size: 42, align: 'center', baseline: 'top' },
+      { key: 'email', x: 204, y: 760, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 26, align: 'center', baseline: 'top' },
+    ],
+  },
+  {
+    id: 5,
+    name: 'Full Listing',
+    positions: 1,
+    hasJD: true,
+    variants: [
+      { id: '5-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/5-1.png' },
+      { id: '5-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/5-2.png' },
+    ],
+    fields: [
+      { key: 'role',       label: 'Job Role',         placeholder: 'e.g. UI/UX Designer',   hint: null },
+      { key: 'experience', label: 'Experience',       placeholder: 'e.g. 3-5',               hint: 'Renders as "Experience: 3-5 Years"' },
+      { key: 'jd',         label: 'Job Description',  placeholder: 'Short description of the role and responsibilities...', hint: 'Keep it under 3 lines for best results', isTextarea: true },
+      { key: 'email',      label: 'Contact Email',    placeholder: 'yourname@tezo.com',      hint: null },
+    ],
+    layers: [
+      { key: 'role',       x: 204, y: 520, w: 672, h: 70,  font: 'Gilroy', weight: '500', size: 48, align: 'center', baseline: 'top' },
+      { key: 'experience', x: 204, y: 605, w: 672, h: 44,  font: 'Gilroy', weight: '500', size: 30, align: 'center', baseline: 'top', prefix: 'Experience: ', suffix: ' Years' },
+      { key: 'jd',         x: 100, y: 670, w: 880, h: 120, font: 'Gilroy', weight: '400', size: 22, align: 'center', baseline: 'top', multiline: true },
+      { key: 'email',      x: 204, y: 820, w: 672, h: 44,  font: 'Gilroy', weight: '500', size: 28, align: 'center', baseline: 'top' },
+    ],
+  },
+];
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let activeFilter = 'all';
+let jdOnly = false;
+let selectedTemplate = null;
+let selectedVariant = 0;
+let generatedDataURL = null;
+
+// ─── DOM refs ────────────────────────────────────────────────────────────────
+const grid = document.getElementById('templatesGrid');
+const editorOverlay = document.getElementById('editorOverlay');
+const editorBackdrop = document.getElementById('editorBackdrop');
+const previewOverlay = document.getElementById('previewOverlay');
+const previewImg = document.getElementById('previewImg');
+const formFields = document.getElementById('formFields');
+const panelTitle = document.getElementById('panelTitle');
+const panelSubtitle = document.getElementById('panelSubtitle');
+const canvas = document.getElementById('renderCanvas');
+const ctx = canvas.getContext('2d');
+
+// ─── Render grid ─────────────────────────────────────────────────────────────
+function renderGrid() {
+  const filtered = TEMPLATES.filter(t => {
+    if (activeFilter !== 'all' && String(t.positions) !== activeFilter) return false;
+    if (jdOnly && !t.hasJD) return false;
+    return true;
+  });
+
+  grid.innerHTML = '';
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state">No templates match the current filters.</div>';
+    return;
+  }
+
+  filtered.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'template-card';
+    card.dataset.id = t.id;
+
+    const badgeClass = t.positions === 1 ? 'badge-roles-1' : t.positions === 2 ? 'badge-roles-2' : 'badge-roles-3';
+    const posLabel = t.positions === 1 ? '1 position' : `${t.positions} positions`;
+
+    card.innerHTML = `
+      <div class="selected-check">
+        <svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <img class="template-thumb" src="${t.variants[0].img}" alt="${t.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="template-thumb-placeholder" style="display:none">${t.name}</div>
+      <div class="template-info">
+        <div>
+          <div class="template-name">${t.name}</div>
+          <div style="display:flex;gap:5px;margin-top:4px;align-items:center;">
+            <span class="template-badge ${badgeClass}">${posLabel}</span>
+            ${t.hasJD ? '<span class="template-badge" style="background:rgba(60,180,120,0.1);color:#5cb88a;">+ JD</span>' : ''}
+          </div>
+        </div>
+        <div class="color-dots">
+          ${t.variants.map((v,i) => `<div class="color-dot ${i===0?'active':''}" style="background:${v.swatch}" data-tid="${t.id}" data-vi="${i}"></div>`).join('')}
+        </div>
+      </div>
+    `;
+
+    card.addEventListener('click', (e) => {
+      if (e.target.classList.contains('color-dot')) return;
+      openEditor(t.id);
+    });
+    grid.appendChild(card);
+  });
+
+  // color dot clicks
+  grid.querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', e => {
+      e.stopPropagation();
+      const card = dot.closest('.template-card');
+      const t = TEMPLATES.find(x => x.id === Number(dot.dataset.tid));
+      const vi = Number(dot.dataset.vi);
+      const img = card.querySelector('.template-thumb');
+      img.src = t.variants[vi].img;
+      card.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+}
+
+// ─── Filters ─────────────────────────────────────────────────────────────────
+document.querySelectorAll('.chip[data-filter]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-filter]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilter = chip.dataset.filter;
+    renderGrid();
+  });
+});
+
+document.getElementById('jdFilter').addEventListener('click', function() {
+  jdOnly = !jdOnly;
+  this.classList.toggle('active', jdOnly);
+  renderGrid();
+});
+
+// ─── Editor open/close ────────────────────────────────────────────────────────
+function openEditor(templateId) {
+  selectedTemplate = TEMPLATES.find(t => t.id === templateId);
+  selectedVariant = 0;
+  renderEditorContent();
+  editorOverlay.classList.add('open');
+
+  // mark card
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  const card = document.querySelector(`.template-card[data-id="${templateId}"]`);
+  if (card) card.classList.add('selected');
+}
+
+function closeEditor() {
+  editorOverlay.classList.remove('open');
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+}
+
+document.getElementById('closeEditor').addEventListener('click', closeEditor);
+editorBackdrop.addEventListener('click', closeEditor);
+
+function renderEditorContent() {
+  const t = selectedTemplate;
+  panelTitle.textContent = t.name;
+  panelSubtitle.textContent = `${t.positions} open position${t.positions>1?'s':''} · ${t.hasJD ? 'With job description' : 'No job description'}`;
+
+  // variant buttons
+  const variantRow = document.querySelector('.variant-row');
+  variantRow.innerHTML = t.variants.map((v,i) => `
+    <button class="variant-btn ${i===0?'active':''}" data-variant="${i}">
+      <span class="variant-swatch" style="background:${v.swatch};"></span>
+      ${v.label}
+    </button>
+  `).join('');
+  variantRow.querySelectorAll('.variant-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      variantRow.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedVariant = Number(btn.dataset.variant);
+    });
+  });
+
+  // form fields
+  formFields.innerHTML = t.fields.map(f => `
+    <div class="form-field">
+      <label class="form-label" for="field_${f.key}">${f.label}</label>
+      ${f.isTextarea
+        ? `<textarea class="form-input" id="field_${f.key}" placeholder="${f.placeholder}" rows="3"></textarea>`
+        : `<input class="form-input" id="field_${f.key}" type="text" placeholder="${f.placeholder}">`
+      }
+      ${f.hint ? `<div class="form-hint">→ ${f.hint}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ─── Generate ─────────────────────────────────────────────────────────────────
+document.getElementById('generateBtn').addEventListener('click', generateImage);
+
+async function generateImage() {
+  const t = selectedTemplate;
+  const variant = t.variants[selectedVariant];
+  const btn = document.getElementById('generateBtn');
+
+  // collect field values
+  const values = {};
+  t.fields.forEach(f => {
+    values[f.key] = document.getElementById(`field_${f.key}`)?.value?.trim() || '';
+  });
+
+  btn.textContent = 'Generating…';
+  btn.disabled = true;
+
+  await document.fonts.ready;
+
+  canvas.width = CANVAS_W;
+  canvas.height = CANVAS_H;
+
+  const img = new Image();
+  img.onload = () => {
+    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
+
+    t.layers.forEach(layer => {
+      const raw = values[layer.key] || '';
+      if (!raw) return;
+
+      let text = raw;
+      if (layer.prefix) text = layer.prefix + text;
+      if (layer.suffix) text = text + layer.suffix;
+
+      ctx.save();
+      ctx.fillStyle = variant.textColor;
+      ctx.textAlign = layer.align || 'center';
+      ctx.textBaseline = 'top';
+      ctx.font = `${layer.weight} ${layer.size}px "Gilroy", sans-serif`;
+      ctx.letterSpacing = `${-0.03 * layer.size}px`;
+
+      const cx = layer.align === 'center' ? layer.x + layer.w / 2 : layer.x;
+
+      if (layer.multiline) {
+        const words = text.split(' ');
+        const lineHeight = layer.size * 1.45;
+        let line = '', lineY = layer.y;
+        words.forEach((word, wi) => {
+          const test = line + (line ? ' ' : '') + word;
+          if (ctx.measureText(test).width > layer.w && line) {
+            ctx.fillText(line, cx, lineY);
+            line = word; lineY += lineHeight;
+          } else { line = test; }
+          if (wi === words.length - 1) ctx.fillText(line, cx, lineY);
+        });
+      } else {
+        ctx.fillText(text, cx, layer.y);
+      }
+      ctx.restore();
+    });
+
+    generatedDataURL = canvas.toDataURL('image/png');
+    previewImg.src = generatedDataURL;
+    document.getElementById('downloadBtn').onclick = () => {
+      const a = document.createElement('a');
+      a.href = generatedDataURL;
+      a.download = `tezo-hiring-${t.name.toLowerCase().replace(/\s+/g,'-')}-${variant.id}.png`;
+      a.click();
+    };
+
+    btn.textContent = 'Generate Image →';
+    btn.disabled = false;
+    closeEditor();
+    previewOverlay.classList.add('open');
+  };
+  img.onerror = () => {
+    btn.textContent = 'Generate Image →';
+    btn.disabled = false;
+    alert('Could not load template image. Make sure imgs/ folder is alongside index.html.');
+  };
+  img.src = variant.img;
+}
+
+// ─── Preview close ────────────────────────────────────────────────────────────
+document.getElementById('closePreview').addEventListener('click', () => {
+  previewOverlay.classList.remove('open');
+});
+previewOverlay.addEventListener('click', (e) => {
+  if (e.target === previewOverlay) previewOverlay.classList.remove('open');
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+renderGrid();
+</script>
+</body>
+</html>
