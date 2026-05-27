@@ -733,25 +733,23 @@ const TEMPLATES = [
   {
     id: 3,
     name: 'Double Role',
-    positions: 2,
-    hasJD: false,
+    positions: 1,
+    hasJD: true,
     variants: [
-      { id: '3-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/3-1.png' },
-      { id: '3-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/3-2.png' },
+      { id: '3-1', label: 'Variant 1', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/3-1.png' },
+      { id: '3-2', label: 'Variant 2', swatch: '#d4c5b0', textColor: '#212121', img: 'imgs/3-2.png' },
     ],
     fields: [
-      { key: 'role1',       label: 'Job Role 1',    placeholder: 'e.g. Product Designer', hint: null },
-      { key: 'experience1', label: 'Experience 1',  placeholder: 'e.g. 2-4',  hint: 'Renders as "Experience: 2-4 Years"' },
-      { key: 'role2',       label: 'Job Role 2',    placeholder: 'e.g. Marketing Lead',   hint: null },
-      { key: 'experience2', label: 'Experience 2',  placeholder: 'e.g. 3-5',  hint: 'Renders as "Experience: 3-5 Years"' },
-      { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com',     hint: null },
+      { key: 'role',       label: 'Job Role',        placeholder: 'e.g. Product Designer',            hint: null },
+      { key: 'experience', label: 'Experience',      placeholder: 'e.g. 1-2',                         hint: 'Renders as "Experience: 1-2 Years"' },
+      { key: 'jd',         label: 'Job Description', placeholder: 'Describe the role briefly...', hint: 'Max 220 characters · 4 lines', isTextarea: true, maxLength: 220 },
+      { key: 'email',      label: 'Contact Email',   placeholder: 'yourname@tezo.com',                hint: null },
     ],
     layers: [
-      { key: 'role1',       x: 204, y: 520, w: 672, h: 60, font: 'Gilroy', weight: '500', size: 44, align: 'center', baseline: 'top' },
-      { key: 'experience1', x: 204, y: 590, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 28, align: 'center', baseline: 'top', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'role2',       x: 204, y: 660, w: 672, h: 60, font: 'Gilroy', weight: '500', size: 44, align: 'center', baseline: 'top' },
-      { key: 'experience2', x: 204, y: 730, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 28, align: 'center', baseline: 'top', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'email',       x: 204, y: 810, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 26, align: 'center', baseline: 'top' },
+      { key: 'role',       x: 161, y: 491, font: 'Gilroy',     weight: '700', size: 44, align: 'left', color: '#E54A59', letterSpacing: -0.05 },
+      { key: 'experience', x: 161, y: 541, font: 'Gilroy',     weight: '400', size: 20, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
+      { key: 'jd',         x: 161, y: 595, font: 'Gilroy',     weight: '400', size: 16, align: 'left', multiline: true, w: 395, h: 101, lineHeight: 22 },
+      { key: 'email',      x: 152, y: 844, font: 'Parkinsans', weight: '400', size: 24, align: 'left' },
     ],
   },
   {
@@ -946,7 +944,10 @@ function renderEditorContent() {
     <div class="form-field">
       <label class="form-label" for="field_${f.key}">${f.label}</label>
       ${f.isTextarea
-        ? `<textarea class="form-input" id="field_${f.key}" placeholder="${f.placeholder}" rows="3"></textarea>`
+        ? `<textarea class="form-input" id="field_${f.key}" placeholder="${f.placeholder}" rows="4" ${f.maxLength ? `maxlength="${f.maxLength}"` : ''}
+            oninput="document.getElementById('counter_${f.key}').textContent = this.value.length + '/${f.maxLength || 999}'"
+          ></textarea>
+          ${f.maxLength ? `<div class="form-hint" id="counter_${f.key}" style="text-align:right;">0/${f.maxLength}</div>` : ''}`
         : `<input class="form-input" id="field_${f.key}" type="text" placeholder="${f.placeholder}">`
       }
       ${f.hint ? `<div class="form-hint">→ ${f.hint}</div>` : ''}
@@ -977,6 +978,10 @@ async function generateImage() {
       document.fonts.load('500 72px "Gilroy"'),
       document.fonts.load('400 40px "Gilroy"'),
       document.fonts.load('400 28px "Parkinsans"'),
+      document.fonts.load('400 24px "Parkinsans"'),
+      document.fonts.load('700 44px "Gilroy"'),
+      document.fonts.load('400 20px "Gilroy"'),
+      document.fonts.load('400 16px "Gilroy"'),
       document.fonts.load('400 38px "Parkinsans"'),
       document.fonts.load('500 56px "Gilroy"'),
       document.fonts.load('400 40px "Gilroy"'),
@@ -1013,11 +1018,12 @@ async function generateImage() {
       const sMaxW = (layer.w || CANVAS_W - layer.x * 2) * scaleX;
 
       ctx.save();
-      ctx.fillStyle = variant.textColor;
+      ctx.fillStyle = layer.color || variant.textColor;
       ctx.textAlign = layer.align || 'center';
       ctx.textBaseline = 'top';
       ctx.font = `${layer.weight} ${sSize}px "${layer.font}", sans-serif`;
-      ctx.letterSpacing = `${-0.03 * sSize}px`;
+      const lsMultiplier = layer.letterSpacing !== undefined ? layer.letterSpacing : -0.03;
+      ctx.letterSpacing = `${lsMultiplier * sSize}px`;
 
       // For center-aligned text use canvas center; for left-aligned use X directly
       const cx = layer.align === 'center' ? canvas.width / 2 : sx;
@@ -1047,7 +1053,11 @@ async function generateImage() {
         // lineHeight from Figma is total line box (font size + leading)
         // Scale it the same way as font size
         const scaledLH = layer.lineHeight ? layer.lineHeight * scaleX : lineHeight;
-        lines.forEach((l, i) => ctx.fillText(l, cx, sy + i * scaledLH));
+        const maxH = layer.h ? layer.h * scaleY : Infinity;
+        lines.forEach((l, i) => {
+          const lineY = sy + i * scaledLH;
+          if (lineY + scaledLH <= sy + maxH) ctx.fillText(l, cx, lineY);
+        });
       } else {
         ctx.fillText(text, cx, sy);
       }
