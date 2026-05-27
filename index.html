@@ -756,23 +756,23 @@ const TEMPLATES = [
   {
     id: 4,
     name: 'Triple Roles',
-    positions: 3,
+    positions: 2,
     hasJD: false,
     variants: [
       { id: '4-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/4-1.png' },
       { id: '4-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/4-2.png' },
     ],
     fields: [
-      { key: 'role1', label: 'Job Role 1', placeholder: 'e.g. Product Designer', hint: null },
-      { key: 'role2', label: 'Job Role 2', placeholder: 'e.g. Marketing Lead',   hint: null },
-      { key: 'role3', label: 'Job Role 3', placeholder: 'e.g. Backend Engineer', hint: null },
-      { key: 'email', label: 'Contact Email', placeholder: 'yourname@tezo.com',  hint: null },
+      { key: 'role1', label: 'Job Role 1', placeholder: 'e.g. Product Designer', hint: 'Appears in red pill, 2 lines max' },
+      { key: 'role2', label: 'Job Role 2', placeholder: 'e.g. Marketing Lead',   hint: 'Appears in red pill, 2 lines max' },
+      { key: 'experience', label: 'Experience', placeholder: 'e.g. 1-2', hint: 'Renders as "1-2 Years"' },
+      { key: 'email', label: 'Contact Email', placeholder: 'yourname@tezo.com', hint: null },
     ],
     layers: [
-      { key: 'role1', x: 204, y: 500, w: 672, h: 55, font: 'Gilroy', weight: '500', size: 42, align: 'center', baseline: 'top' },
-      { key: 'role2', x: 204, y: 580, w: 672, h: 55, font: 'Gilroy', weight: '500', size: 42, align: 'center', baseline: 'top' },
-      { key: 'role3', x: 204, y: 660, w: 672, h: 55, font: 'Gilroy', weight: '500', size: 42, align: 'center', baseline: 'top' },
-      { key: 'email', x: 204, y: 760, w: 672, h: 40, font: 'Gilroy', weight: '500', size: 26, align: 'center', baseline: 'top' },
+      { key: 'role1', x: 274, y: 481, font: 'Parkinsans', weight: '600', size: 28, align: 'center', color: '#ffffff', letterSpacing: -0.03, multiline: true, maxLines: 2, w: 188, lineHeight: 33, pill: { color: '#E54A59', padX: 75, padY: 20, radius: 110, shadow: true } },
+      { key: 'role2', x: 561, y: 666, font: 'Parkinsans', weight: '600', size: 28, align: 'center', color: '#ffffff', letterSpacing: -0.03, multiline: true, maxLines: 2, w: 188, lineHeight: 33, pill: { color: '#E54A59', padX: 75, padY: 20, radius: 110, shadow: true } },
+      { key: 'experience', x: 156, y: 981, font: 'Gilroy', weight: '600', size: 30, align: 'right', letterSpacing: -0.03, suffix: ' Years' },
+      { key: 'email', x: 486, y: 1257, font: 'Parkinsans', weight: '400', size: 28, align: 'left', letterSpacing: -0.03 },
     ],
   },
   {
@@ -1021,17 +1021,50 @@ async function generateImage() {
       const sMaxW = (layer.w || CANVAS_W - layer.x * 2) * scaleX;
 
       ctx.save();
-      ctx.fillStyle = layer.color || variant.textColor;
-      ctx.textAlign = layer.align || 'center';
-      ctx.textBaseline = 'top';
       ctx.font = `${layer.weight} ${sSize}px "${layer.font}", sans-serif`;
       const lsMultiplier = layer.letterSpacing !== undefined ? layer.letterSpacing : -0.03;
       ctx.letterSpacing = `${lsMultiplier * sSize}px`;
 
-      // For center-aligned text use canvas center; for left-aligned use X directly
+      // Draw pill background if defined
+      if (layer.pill) {
+        const p = layer.pill;
+        // measure text to get pill width
+        const textLines = layer.maxLines === 2 && text.trim().split(' ').length > 1
+          ? [text.trim().split(' ')[0], text.trim().split(' ').slice(1).join(' ')]
+          : [text];
+        const maxLineW = Math.max(...textLines.map(l => ctx.measureText(l).width));
+        const pillW = maxLineW + p.padX * 2 * scaleX;
+        const lineH = layer.lineHeight ? layer.lineHeight * scaleX : sSize * 1.2;
+        const pillH = (lineH * textLines.length) + p.padY * 2 * scaleY;
+        const pillR = Math.min(p.radius * scaleX, pillH / 2);
+
+        if (p.shadow) {
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.25)';
+          ctx.shadowBlur = 20 * scaleX;
+          ctx.shadowOffsetY = 6 * scaleY;
+        }
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.roundRect(sx, sy, pillW, pillH, pillR);
+        ctx.fill();
+        if (p.shadow) ctx.restore();
+
+        // Center text inside pill
+        ctx.fillStyle = layer.color || '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        const textCx = sx + pillW / 2;
+        const textStartY = sy + p.padY * scaleY;
+        textLines.forEach((l, i) => ctx.fillText(l, textCx, textStartY + i * lineH));
+        ctx.restore();
+        return;
+      }
+
+      ctx.fillStyle = layer.color || variant.textColor;
+      ctx.textAlign = layer.align || 'center';
+      ctx.textBaseline = 'top';
       const cx = layer.align === 'center' ? canvas.width / 2 : sx;
-      // Debug
-      console.log('cx:', cx, 'align:', layer.align, 'canvas.width:', canvas.width, 'textAlign:', ctx.textAlign);
 
       if (layer.multiline) {
         const words = text.trim().replace(/\s+/g, ' ').split(' ');
