@@ -671,6 +671,7 @@ const CANVAS_H = 1350;
 const TEMPLATES = [
   {
     id: 1,
+    thumb: 'thumbs/1.png',
     name: 'Classic Chair',
     positions: 1,
     hasJD: false,
@@ -708,6 +709,7 @@ const TEMPLATES = [
   },
   {
     id: 2,
+    thumb: 'thumbs/2.png',
     name: 'Minimal Drop',
     positions: 2,
     hasJD: false,
@@ -732,6 +734,7 @@ const TEMPLATES = [
   },
   {
     id: 3,
+    thumb: 'thumbs/3.png',
     name: 'Double Role',
     positions: 1,
     hasJD: true,
@@ -755,6 +758,7 @@ const TEMPLATES = [
   },
   {
     id: 4,
+    thumb: 'thumbs/4.png',
     name: 'Triple Roles',
     positions: 2,
     hasJD: false,
@@ -777,6 +781,7 @@ const TEMPLATES = [
   },
   {
     id: 5,
+    thumb: 'thumbs/5.png',
     name: 'Full Listing',
     positions: 3,
     hasJD: false,
@@ -850,7 +855,7 @@ function renderGrid() {
       <div class="selected-check">
         <svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <img class="template-thumb" src="${t.variants[0].img}" alt="${t.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img class="template-thumb" src="${t.thumb || t.variants[0].img}" alt="${t.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="template-thumb-placeholder" style="display:none">${t.name}</div>
       <div class="template-info">
         <div>
@@ -1120,7 +1125,7 @@ async function generateImage() {
         const maxH = layer.h ? layer.h * scaleY : Infinity;
         lines.forEach((l, i) => {
           const lineY = sy + i * scaledLH;
-          if (lineY + scaledLH <= sy + maxH) ctx.fillText(l, cx, lineY);
+          if (maxH === Infinity || lineY + scaledLH <= sy + maxH) ctx.fillText(l, cx, lineY);
         });
       } else {
         ctx.fillText(text, cx, sy);
