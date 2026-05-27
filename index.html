@@ -735,6 +735,7 @@ const TEMPLATES = [
     name: 'Double Role',
     positions: 1,
     hasJD: true,
+    frameW: 1080, frameH: 1080,
     variants: [
       { id: '3-1', label: 'Variant 1', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/3-1.png' },
       { id: '3-2', label: 'Variant 2', swatch: '#d4c5b0', textColor: '#212121', img: 'imgs/3-2.png' },
@@ -999,9 +1000,11 @@ async function generateImage() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0);
 
-    // Scale factors: Figma frame is 1080wide, canvas matches actual image size
-    const scaleX = canvas.width / CANVAS_W;
-    const scaleY = canvas.height / CANVAS_H;
+    // Scale factors: use template's own Figma frame size if defined
+    const figmaW = t.frameW || CANVAS_W;
+    const figmaH = t.frameH || CANVAS_H;
+    const scaleX = canvas.width / figmaW;
+    const scaleY = canvas.height / figmaH;
 
     t.layers.forEach(layer => {
       const raw = values[layer.key] || '';
