@@ -723,9 +723,9 @@ const TEMPLATES = [
       { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com',     hint: null },
     ],
     layers: [
-      { key: 'role1',       x: 72,  y: 550,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517 },
+      { key: 'role1',       x: 72,  y: 550,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517, lineHeight: 62 },
       { key: 'experience1', x: 72,  y: 687,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'role2',       x: 72,  y: 777,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517 },
+      { key: 'role2',       x: 72,  y: 777,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517, lineHeight: 62 },
       { key: 'experience2', x: 72,  y: 914,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
       { key: 'email',       x: 87,  y: 1151, font: 'Parkinsans', weight: '400', size: 38, align: 'center' },
     ],
@@ -1024,7 +1024,7 @@ async function generateImage() {
 
       if (layer.multiline) {
         const words = text.split(' ');
-        const lineHeight = sSize * 1.45;
+        const lineHeight = layer.lineHeight ? layer.lineHeight * scaleX : sSize * 1.45;
         let lines = [];
         if (layer.maxLines === 2 && words.length > 1) {
           // Always break after first word, rest on line 2
