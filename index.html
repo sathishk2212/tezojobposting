@@ -723,11 +723,11 @@ const TEMPLATES = [
       { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com',     hint: null },
     ],
     layers: [
-      { key: 'role1',       x: 72,  y: 550,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, w: 517 },
+      { key: 'role1',       x: 72,  y: 550,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517 },
       { key: 'experience1', x: 72,  y: 687,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'role2',       x: 72,  y: 777,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, w: 517 },
+      { key: 'role2',       x: 72,  y: 777,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517 },
       { key: 'experience2', x: 72,  y: 914,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'email',       x: 87,  y: 1151, font: 'Parkinsans', weight: '400', size: 38, align: 'left' },
+      { key: 'email',       x: 87,  y: 1151, font: 'Parkinsans', weight: '400', size: 38, align: 'center' },
     ],
   },
   {
@@ -1025,15 +1025,24 @@ async function generateImage() {
       if (layer.multiline) {
         const words = text.split(' ');
         const lineHeight = sSize * 1.45;
-        let line = '', lineY = sy;
-        words.forEach((word, wi) => {
-          const test = line + (line ? ' ' : '') + word;
-          if (ctx.measureText(test).width > sMaxW && line) {
-            ctx.fillText(line, cx, lineY);
-            line = word; lineY += lineHeight;
-          } else { line = test; }
-          if (wi === words.length - 1) ctx.fillText(line, cx, lineY);
-        });
+        let lines = [];
+        if (layer.maxLines === 2 && words.length > 1) {
+          // Always break after first word, rest on line 2
+          lines = [words[0], words.slice(1).join(' ')];
+        } else {
+          let line = '';
+          words.forEach(word => {
+            const test = line + (line ? ' ' : '') + word;
+            if (ctx.measureText(test).width > sMaxW && line) {
+              lines.push(line);
+              line = word;
+            } else {
+              line = test;
+            }
+          });
+          if (line) lines.push(line);
+        }
+        lines.forEach((l, i) => ctx.fillText(l, cx, sy + i * lineHeight));
       } else {
         ctx.fillText(text, cx, sy);
       }
