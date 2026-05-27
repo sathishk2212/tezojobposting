@@ -1021,6 +1021,8 @@ async function generateImage() {
 
       // For center-aligned text use canvas center; for left-aligned use X directly
       const cx = layer.align === 'center' ? canvas.width / 2 : sx;
+      // Debug
+      console.log('cx:', cx, 'align:', layer.align, 'canvas.width:', canvas.width, 'textAlign:', ctx.textAlign);
 
       if (layer.multiline) {
         const words = text.trim().replace(/\s+/g, ' ').split(' ');
