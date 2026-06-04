@@ -3,1168 +3,670 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tezo — Hiring Template Generator</title>
+<title>Manufacturing Process Automation Solution | Tezo</title>
+<meta name="description" content="Tezo helps manufacturers automate workflows, improve process visibility, and modernize operations with AI-powered process automation built on Microsoft Cloud.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
-
-  @font-face { font-family: 'Gilroy'; font-weight: 100; src: url('fonts/Gilroy-Thin.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 200; src: url('fonts/Gilroy-UltraLight.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 300; src: url('fonts/Gilroy-Light.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 400; src: url('fonts/Gilroy-Regular.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 500; src: url('fonts/Gilroy-Medium.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 600; src: url('fonts/Gilroy-SemiBold.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 700; src: url('fonts/Gilroy-Bold.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 800; src: url('fonts/Gilroy-ExtraBold.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 900; src: url('fonts/Gilroy-Black.woff2') format('woff2'); }
-  @font-face { font-family: 'Gilroy'; font-weight: 950; src: url('fonts/Gilroy-Heavy.woff2') format('woff2'); }
-  @font-face { font-family: 'Parkinsans'; font-weight: 300; src: url('fonts/Parkinsans-Light.woff2') format('woff2'); }
-  @font-face { font-family: 'Parkinsans'; font-weight: 400; src: url('fonts/Parkinsans-Regular.woff2') format('woff2'); }
-  @font-face { font-family: 'Parkinsans'; font-weight: 500; src: url('fonts/Parkinsans-Medium.woff2') format('woff2'); }
-  @font-face { font-family: 'Parkinsans'; font-weight: 600; src: url('fonts/Parkinsans-SemiBold.woff2') format('woff2'); }
-  @font-face { font-family: 'Parkinsans'; font-weight: 700; src: url('fonts/Parkinsans-Bold.woff2') format('woff2'); }
-  @font-face { font-family: 'Parkinsans'; font-weight: 800; src: url('fonts/Parkinsans-ExtraBold.woff2') format('woff2'); }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0c0c0e;
-    --surface: #141416;
-    --surface2: #1c1c1f;
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.15);
-    --text: #f0efe8;
-    --text-muted: #6b6a65;
-    --text-dim: #9e9d96;
-    --accent: #e83a5a;
-    --accent2: #5b4ef8;
-    --accent-glow: rgba(232,58,90,0.15);
-    --radius: 12px;
-    --radius-sm: 8px;
+  :root{
+    /* ---- Tezo brand dark palette ---- */
+    --bg:        #0B0A11;
+    --bg-2:      #110F19;
+    --surface:   #16131F;
+    --surface-2: #1D1A2B;
+    --border:    rgba(255,255,255,0.09);
+    --border-2:  rgba(255,255,255,0.16);
+    --text:      #F0EEF6;
+    --muted:     #9F99B0;
+    --muted-2:   #6F6982;
+    --accent:    #e54a59;   /* primary — buttons & highlights */
+    --accent-2:  #b0a8fe;   /* complement */
+    --accent-dim: rgba(229,74,89,0.14);
+    --secondary: #4e3aad;   /* solid cards */
+    --secondary-light: #b0a8fe;
+    --radius:    16px;
+    --radius-sm: 12px;
+    --maxw:      1180px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  html { scroll-behavior: smooth; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  /* atmosphere */
+  .glow{position:fixed;pointer-events:none;z-index:0;filter:blur(80px);opacity:.5}
+  .glow-1{top:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(229,74,89,0.16),transparent 70%)}
+  .glow-2{top:900px;left:-250px;width:600px;height:600px;background:radial-gradient(circle,rgba(78,58,173,0.22),transparent 70%)}
 
-  /* Ambient background */
-  body::before {
-    content: '';
-    position: fixed;
-    top: -30%;
-    left: -10%;
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle, rgba(232,58,90,0.04) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -20%;
-    right: -10%;
-    width: 50vw;
-    height: 50vw;
-    background: radial-gradient(circle, rgba(91,78,248,0.05) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-  /* ── Header ── */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    padding: 0 40px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(12,12,14,0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(7,11,16,0.72);
+    border-bottom:1px solid var(--border);
   }
-  .logo {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .logo-dot {
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 12px var(--accent);
-  }
-  .header-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.5px;
-  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:22px;letter-spacing:-.5px}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
+  .nav-links{display:flex;gap:32px;align-items:center;font-size:14.5px;color:var(--muted);font-weight:500}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;border:1px solid var(--border-2);padding:9px 18px;border-radius:99px;font-size:14px;font-weight:600;color:var(--text);transition:.25s}
+  .nav-cta svg{width:16px;height:16px;flex-shrink:0}
+  .nav-cta:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  @media(max-width:860px){.nav-links{display:none}}
 
-  /* ── Main layout ── */
-  main {
-    position: relative;
-    z-index: 1;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 48px 40px 80px;
-  }
+  /* ---------- BUTTONS ---------- */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;padding:14px 26px;border-radius:99px;cursor:pointer;border:1px solid transparent;transition:.25s;font-family:var(--font)}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(229,74,89,0.32)}
+  .btn-ghost{background:transparent;border-color:var(--border-2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn svg{width:17px;height:17px}
 
-  /* ── Page title ── */
-  .page-title {
-    margin-bottom: 40px;
-  }
-  .page-title h1 {
-    font-size: 32px;
-    font-weight: 500;
-    letter-spacing: -0.8px;
-    line-height: 1.1;
-    margin-bottom: 8px;
-  }
-  .page-title h1 span { color: var(--accent); }
-  .page-title p {
-    color: var(--text-muted);
-    font-size: 14px;
-  }
+  /* ---------- SECTION PRIMITIVES ---------- */
+  section{padding:104px 0;position:relative}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);opacity:.6}
+  h2.title{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-1px;line-height:1.12;max-width:760px}
+  .section-sub{color:var(--muted);font-size:17px;max-width:620px;margin-top:18px}
+  .section-head{margin-bottom:54px}
 
-  /* ── Filters ── */
-  .filters {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-  .filter-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-    margin-right: 4px;
-  }
-  .chip {
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    user-select: none;
-  }
-  .chip:hover { border-color: var(--border-hover); color: var(--text); }
-  .chip.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-    box-shadow: 0 0 16px rgba(232,58,90,0.3);
-  }
-  .chip-check {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    user-select: none;
-    margin-left: 8px;
-  }
-  .chip-check:hover { border-color: var(--border-hover); color: var(--text); }
-  .chip-check.active {
-    border-color: var(--accent2);
-    color: var(--text);
-    background: rgba(91,78,248,0.1);
-  }
-  .chip-check .box {
-    width: 14px; height: 14px;
-    border-radius: 4px;
-    border: 1.5px solid currentColor;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-  .chip-check.active .box {
-    background: var(--accent2);
-    border-color: var(--accent2);
-  }
-  .chip-check .box::after {
-    content: '';
-    width: 7px; height: 5px;
-    border-left: 1.5px solid #fff;
-    border-bottom: 1.5px solid #fff;
-    transform: rotate(-45deg) translateY(-1px);
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .chip-check.active .box::after { opacity: 1; }
-  .divider-v {
-    width: 1px; height: 20px;
-    background: var(--border);
-    margin: 0 4px;
-  }
+  /* ---------- HERO ---------- */
+  .hero{padding:120px 0 96px;text-align:center}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:var(--accent-dim);border:1px solid rgba(229,74,89,0.3);color:var(--accent);padding:8px 16px;border-radius:99px;font-size:13px;font-weight:600;margin-bottom:30px}
+  .chip svg{width:15px;height:15px}
+  .hero h1{font-size:clamp(36px,6vw,68px);font-weight:800;letter-spacing:-2px;line-height:1.05;max-width:900px;margin:0 auto}
+  .hero h1 .grad{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.lead{color:var(--muted);font-size:19px;max-width:660px;margin:26px auto 14px;line-height:1.65}
+  .hero .built{color:var(--muted-2);font-size:15px;font-weight:500;margin-bottom:36px}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 
-  /* ── Template Grid ── */
-  .templates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-  .template-card {
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-  }
-  .template-card:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-  }
-  .template-card.selected {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent), 0 12px 40px rgba(232,58,90,0.15);
-  }
-  .template-thumb {
-    width: 100%;
-    aspect-ratio: 4/5;
-    object-fit: cover;
-    display: block;
-    background: var(--surface2);
-  }
-  .template-thumb-placeholder {
-    width: 100%;
-    aspect-ratio: 4/5;
-    background: var(--surface2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  .template-info {
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .template-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-  }
-  .template-meta {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-  .template-badge {
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-weight: 500;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.3px;
-  }
-  .badge-roles-1 { background: rgba(232,58,90,0.12); color: #e8647a; }
-  .badge-roles-2 { background: rgba(91,78,248,0.12); color: #8b82f8; }
-  .badge-roles-3 { background: rgba(60,180,120,0.12); color: #5cb88a; }
-  .selected-check {
-    position: absolute;
-    top: 10px; right: 10px;
-    width: 24px; height: 24px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: none;
-    align-items: center; justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  }
-  .selected-check svg { width: 12px; height: 12px; }
-  .template-card.selected .selected-check { display: flex; }
-  .color-dots {
-    display: flex; gap: 4px;
-  }
-  .color-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-  .color-dot:hover { transform: scale(1.3); }
-  .color-dot.active { border-color: #fff; }
+  /* ---------- GRID CARDS ---------- */
+  .grid{display:grid;gap:20px}
+  .g-3{grid-template-columns:repeat(3,1fr)}
+  .g-4{grid-template-columns:repeat(4,1fr)}
+  .g-2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:980px){.g-3,.g-4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.g-2,.g-3,.g-4{grid-template-columns:1fr}}
 
-  .hidden { display: none !important; }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:30px;transition:.3s;position:relative;overflow:hidden}
+  .card:hover{border-color:var(--border-2);transform:translateY(-4px);background:var(--surface-2)}
+  .card .ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--accent-dim);border:1px solid rgba(229,74,89,0.2);margin-bottom:20px}
+  .card .ico svg{width:23px;height:23px;color:var(--accent)}
+  .card h3{font-size:18.5px;font-weight:600;margin-bottom:10px;letter-spacing:-.3px}
+  .card p{color:var(--muted);font-size:15px;line-height:1.6}
 
-  /* ── Slide-in Editor Panel ── */
-  .editor-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  .editor-overlay.open {
-    pointer-events: all;
-    opacity: 1;
-  }
-  .editor-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-  }
-  .editor-panel {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 560px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-bottom: none;
-    border-radius: 20px 20px 0 0;
-    padding: 28px 32px 36px;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .editor-overlay.open .editor-panel {
-    transform: translateY(0);
-  }
-  .editor-handle {
-    width: 40px; height: 4px;
-    background: var(--border-hover);
-    border-radius: 2px;
-    margin: 0 auto 24px;
-  }
-  .editor-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-  .editor-title {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.4px;
-  }
-  .editor-subtitle {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-  .close-btn {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-  .close-btn:hover { color: var(--text); border-color: var(--border-hover); }
+  /* problem cards accent */
+  .card.warn .ico{background:rgba(255,140,90,0.12);border-color:rgba(255,140,90,0.25)}
+  .card.warn .ico svg{color:#FF9D6B}
 
-  /* ── Form ── */
-  .form-field {
-    margin-bottom: 16px;
-  }
-  .form-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    margin-bottom: 7px;
-  }
-  .form-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 11px 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.15s;
-    resize: vertical;
-  }
-  .form-input::placeholder { color: var(--text-muted); }
-  .form-input:focus { border-color: var(--accent); }
-  .form-hint {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 5px;
-    font-family: 'DM Mono', monospace;
-  }
+  /* ---------- CAPABILITY (what you can do) ---------- */
+  .cap-card{background:var(--secondary);border:1px solid rgba(176,168,254,0.28);border-radius:var(--radius);padding:34px}
+  .cap-card .num{font-size:13px;font-weight:700;color:var(--secondary-light);letter-spacing:1px;margin-bottom:18px}
+  .cap-card .ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.14);margin-bottom:20px}
+  .cap-card .ico svg{width:24px;height:24px;color:#fff}
+  .cap-card h3{font-size:20px;font-weight:600;margin-bottom:10px;color:#fff}
+  .cap-card p{color:rgba(255,255,255,0.82);font-size:15px}
 
-  /* variant selector inside panel */
-  .variant-row {
-    display: flex; gap: 10px; margin-bottom: 20px;
-  }
-  .variant-btn {
-    flex: 1;
-    padding: 9px 12px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text-dim);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex; align-items: center; gap: 8px;
-    justify-content: center;
-  }
-  .variant-btn:hover { border-color: var(--border-hover); color: var(--text); }
-  .variant-btn.active {
-    border-color: var(--accent);
-    color: var(--text);
-    background: rgba(232,58,90,0.08);
-  }
-  .variant-swatch {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  /* ---------- TABBED GALLERY ---------- */
+  .gallery{display:grid;grid-template-columns:300px 1fr;gap:32px;align-items:start}
+  @media(max-width:880px){.gallery{grid-template-columns:1fr}}
+  .tabs{display:flex;flex-direction:column;gap:8px}
+  @media(max-width:880px){.tabs{flex-direction:row;overflow-x:auto;padding-bottom:6px}}
+  .tab{display:flex;align-items:center;gap:13px;padding:16px 18px;border-radius:var(--radius-sm);border:1px solid transparent;cursor:pointer;transition:.25s;color:var(--muted);font-weight:500;font-size:15px;white-space:nowrap}
+  .tab svg{width:20px;height:20px;flex-shrink:0}
+  .tab:hover{background:var(--surface)}
+  .tab.active{background:var(--surface-2);border-color:var(--border-2);color:var(--text)}
+  .tab.active svg{color:var(--accent)}
+  .tab .lbl{display:flex;flex-direction:column;gap:1px}
+  .tab .lbl small{font-size:12px;color:var(--muted-2);font-weight:400;display:none}
+  @media(min-width:881px){.tab.active .lbl small{display:block}}
 
-  /* Generate button */
-  .generate-btn {
-    width: 100%;
-    padding: 14px;
-    border-radius: var(--radius);
-    background: var(--accent);
-    border: none;
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.2px;
-    cursor: pointer;
-    transition: all 0.15s;
-    margin-top: 8px;
-    box-shadow: 0 4px 20px rgba(232,58,90,0.3);
+  .panel{display:none}
+  .panel.active{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .screenshot{
+    border:1px solid var(--border-2);border-radius:var(--radius);overflow:hidden;background:var(--surface);
   }
-  .generate-btn:hover {
-    background: #d42f4e;
-    box-shadow: 0 4px 28px rgba(232,58,90,0.45);
-    transform: translateY(-1px);
-  }
-  .generate-btn:active { transform: translateY(0); }
-  .generate-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-  }
+  .ss-bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg-2)}
+  .ss-bar span{width:11px;height:11px;border-radius:50%;background:#2a3540}
+  .ss-bar .ss-title{margin-left:12px;font-size:12.5px;color:var(--muted-2);font-weight:500}
+  .ss-body{aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    background:
+      linear-gradient(135deg,rgba(229,74,89,0.05),rgba(176,168,254,0.04)),
+      repeating-linear-gradient(45deg,rgba(255,255,255,0.012) 0 12px,transparent 12px 24px);
+    color:var(--muted-2);text-align:center;padding:30px}
+  .ss-body .ph-ico{width:54px;height:54px;border-radius:14px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
+  .ss-body .ph-ico svg{width:27px;height:27px;color:var(--accent)}
+  .ss-body .ph-label{font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+  .ss-body .ph-note{font-size:13px;color:var(--muted-2);max-width:340px}
+  .panel-desc{margin-top:22px}
+  .panel-desc h3{font-size:21px;font-weight:600;margin-bottom:8px}
+  .panel-desc p{color:var(--muted);font-size:15.5px;max-width:560px}
 
-  /* ── Preview Modal ── */
-  .preview-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 300;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-  .preview-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
-  .preview-box {
-    position: relative;
-    max-width: 480px;
-    width: 100%;
-  }
-  .preview-image {
-    width: 100%;
-    border-radius: var(--radius);
-    display: block;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-  }
-  .preview-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-  }
-  .download-btn {
-    flex: 1;
-    padding: 13px;
-    border-radius: var(--radius);
-    background: var(--accent);
-    border: none;
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    box-shadow: 0 4px 16px rgba(232,58,90,0.3);
-  }
-  .download-btn:hover { background: #d42f4e; }
-  .back-btn {
-    padding: 13px 20px;
-    border-radius: var(--radius);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .back-btn:hover { border-color: var(--border-hover); color: var(--text); }
+  /* ---------- MICROSOFT STRIP ---------- */
+  .ms-band{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:42px}
+  .ms-logos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:10px}
+  @media(max-width:880px){.ms-logos{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.ms-logos{grid-template-columns:1fr}}
+  .ms-logo{display:flex;align-items:center;justify-content:center;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:20px 18px;min-height:92px;transition:.25s}
+  .ms-logo:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .ms-logo img{max-height:44px;max-width:86%;width:auto;height:auto;object-fit:contain;opacity:.92;transition:opacity .25s}
+  .ms-logo:hover img{opacity:1}
 
-  /* hidden canvas */
-  #renderCanvas { display: none; }
+  .why-matters{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .wm{display:flex;align-items:center;gap:10px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;font-size:14.5px;font-weight:500;flex:1 1 200px}
+  .wm svg{width:18px;height:18px;color:var(--accent);flex-shrink:0}
 
-  /* empty state */
-  .empty-state {
-    grid-column: 1/-1;
-    padding: 60px 20px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 14px;
-  }
+  /* ---------- OUTCOMES ---------- */
+  .outcome{display:flex;gap:18px;padding:26px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);transition:.3s}
+  .outcome:hover{border-color:var(--border-2);background:var(--surface-2)}
+  .outcome .ico{width:44px;height:44px;flex-shrink:0;border-radius:11px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
+  .outcome .ico svg{width:22px;height:22px;color:var(--accent)}
+  .outcome h3{font-size:17px;font-weight:600;margin-bottom:5px}
+  .outcome p{color:var(--muted);font-size:14.5px}
 
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+  /* ---------- WHY TEZO ---------- */
+  .why-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:760px){.why-list{grid-template-columns:1fr}}
+  .why-item{display:flex;align-items:center;gap:16px;padding:22px 24px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);transition:.3s}
+  .why-item:hover{border-color:var(--accent);background:var(--surface-2)}
+  .why-item .ico{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
+  .why-item .ico svg{width:21px;height:21px;color:var(--accent)}
+  .why-item span{font-size:15.5px;font-weight:500}
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{position:relative;border-radius:24px;padding:64px 48px;text-align:center;overflow:hidden;
+    background:linear-gradient(135deg,var(--secondary),#372a7d);
+    border:1px solid rgba(176,168,254,0.32)}
+  .cta-band h2{font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:-1px;max-width:620px;margin:0 auto}
+  .cta-band p{color:rgba(255,255,255,0.82);font-size:17px;max-width:560px;margin:18px auto 32px}
+  .cta-band .hero-cta{justify-content:center}
+
+  /* ---------- CONTACT FORM ---------- */
+  .form-wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+  @media(max-width:860px){.form-wrap{grid-template-columns:1fr;gap:36px}}
+  .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:38px}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:13.5px;font-weight:500;margin-bottom:8px;color:var(--muted)}
+  .field label .req{color:var(--accent)}
+  .field input,.field select,.field textarea{
+    width:100%;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+    padding:13px 15px;color:var(--text);font-size:15px;font-family:var(--font);transition:.2s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+  .field textarea{resize:vertical;min-height:96px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:480px){.row{grid-template-columns:1fr}}
+  .form-success{display:none;text-align:center;padding:30px 0}
+  .form-success svg{width:54px;height:54px;color:var(--accent);margin-bottom:14px}
+  .form-success h3{font-size:22px;margin-bottom:8px}
+  .form-success p{color:var(--muted)}
+
+  .contact-points{display:flex;flex-direction:column;gap:22px;margin-top:34px}
+  .cp{display:flex;gap:15px;align-items:flex-start}
+  .cp .ico{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
+  .cp .ico svg{width:20px;height:20px;color:var(--accent)}
+  .cp h4{font-size:16px;font-weight:600;margin-bottom:3px}
+  .cp p{color:var(--muted);font-size:14.5px}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--border);padding:54px 0 40px;background:var(--bg-2)}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;margin-bottom:40px}
+  .foot-top p{color:var(--muted);font-size:15px;max-width:320px;margin-top:14px}
+  .foot-cols{display:flex;gap:64px;flex-wrap:wrap}
+  .foot-col h5{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted-2);margin-bottom:16px}
+  .foot-col a{display:block;color:var(--muted);font-size:14.5px;margin-bottom:11px;transition:.2s}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted-2);font-size:13.5px}
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(26px);transition:.7s cubic-bezier(.2,.7,.3,1)}
+  .reveal.in{opacity:1;transform:none}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <div class="logo-dot"></div>
-    Tezo Hiring
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="chip reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      Built on Microsoft Cloud
+    </div>
+    <h1 class="reveal">Automate manufacturing workflows. <span class="grad">Improve visibility.</span> Move faster.</h1>
+    <p class="lead reveal">Tezo helps manufacturers digitize manual processes, automate operational workflows, and improve decision-making across production, quality, maintenance, and operations.</p>
+    <p class="built reveal">Designed for manufacturing teams.</p>
+    <div class="hero-cta reveal">
+      <a href="#contact" class="btn btn-primary">Request a Demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="https://www.tezo.com/contact-us" class="btn btn-ghost">Talk to an Expert</a>
+    </div>
   </div>
-  <span class="header-label">Template Generator</span>
 </header>
 
-<main>
-  <div class="page-title">
-    <h1>Generate a <span>Hiring Post</span></h1>
-    <p>Pick a template, fill in the details, download in seconds.</p>
-  </div>
-
-  <!-- Filters -->
-  <div class="filters">
-    <span class="filter-label">openings</span>
-    <button class="chip active" data-filter="all">All</button>
-    <button class="chip" data-filter="1">1 Position</button>
-    <button class="chip" data-filter="2">2 Positions</button>
-    <button class="chip" data-filter="3">3 Positions</button>
-    <div class="divider-v"></div>
-    <button class="chip-check" id="jdFilter">
-      <span class="box"></span>
-      Job Description
-    </button>
-  </div>
-
-  <!-- Grid -->
-  <div class="templates-grid" id="templatesGrid"></div>
-</main>
-
-<!-- Editor Panel -->
-<div class="editor-overlay" id="editorOverlay">
-  <div class="editor-backdrop" id="editorBackdrop"></div>
-  <div class="editor-panel">
-    <div class="editor-handle"></div>
-    <div class="editor-header">
-      <div>
-        <div class="editor-title" id="panelTitle">Template 1</div>
-        <div class="editor-subtitle" id="panelSubtitle">1 open position · No job description</div>
-      </div>
-      <button class="close-btn" id="closeEditor">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Manufacturing Reality</div>
+      <h2 class="title">Built for manufacturers dealing with operational complexity</h2>
+      <p class="section-sub">Manufacturing teams still rely on spreadsheets, emails, disconnected systems, and manual follow-ups to run critical processes — which slows decisions, hides bottlenecks, and increases operational risk.</p>
     </div>
-
-    <!-- Colour variant -->
-    <div style="margin-bottom:20px;">
-      <div class="form-label">Colour Variant</div>
-      <div class="variant-row">
-        <button class="variant-btn active" data-variant="1">
-          <span class="variant-swatch" style="background:#e8c9a0;"></span>
-          Warm Beige
-        </button>
-        <button class="variant-btn" data-variant="2">
-          <span class="variant-swatch" style="background:#2a2a35;"></span>
-          Dark
-        </button>
+    <div class="grid g-3">
+      <div class="card warn reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v5h-5"/></svg></div>
+        <h3>Manual workflows</h3>
+        <p>Approvals, handoffs, and follow-ups that depend on people chasing people.</p>
+      </div>
+      <div class="card warn reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22M6.6 6.6A18.5 18.5 0 0 0 2 12s3 8 10 8a9.1 9.1 0 0 0 5.4-1.6"/></svg></div>
+        <h3>Limited visibility</h3>
+        <p>No single view of process status, ownership, delays, or exceptions.</p>
+      </div>
+      <div class="card warn reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14M5 2h14M17 22v-4.17a2 2 0 0 0-.59-1.41L12 12l-4.41 4.42A2 2 0 0 0 7 17.83V22M7 2v4.17a2 2 0 0 0 .59 1.41L12 12l4.41-4.42A2 2 0 0 0 17 6.17V2"/></svg></div>
+        <h3>Slow response to issues</h3>
+        <p>Operational risks are identified too late, after they have already impacted performance.</p>
       </div>
     </div>
-
-    <!-- Dynamic fields -->
-    <div id="formFields"></div>
-
-    <button class="generate-btn" id="generateBtn">Generate Image →</button>
   </div>
-</div>
+</section>
 
-<!-- Preview Modal -->
-<div class="preview-overlay" id="previewOverlay">
-  <div class="preview-box">
-    <img class="preview-image" id="previewImg" src="" alt="Generated hiring post">
-    <div class="preview-actions">
-      <button class="download-btn" id="downloadBtn">⬇ Download PNG</button>
-      <button class="back-btn" id="closePreview">← Back</button>
+<!-- SOLUTION -->
+<section id="solution" style="background:var(--bg-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">One Intelligent Layer</div>
+      <h2 class="title">Manufacturing process automation, unified</h2>
+      <p class="section-sub">Tezo's Manufacturing Process Automation solution connects your systems, workflows, and teams into one Microsoft-powered operating layer.</p>
+    </div>
+    <div class="grid g-3">
+      <div class="cap-card reveal">
+        <div class="num">01</div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        <h3>Automate workflows</h3>
+        <p>Digitize approvals, routing, task assignment, and escalations.</p>
+      </div>
+      <div class="cap-card reveal">
+        <div class="num">02</div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3>Track operations in real time</h3>
+        <p>Monitor process status, SLA risks, exceptions, and bottlenecks.</p>
+      </div>
+      <div class="cap-card reveal">
+        <div class="num">03</div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9l4.4-1.4L12 3zM19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z"/></svg></div>
+        <h3>Act faster with AI</h3>
+        <p>Use AI-assisted prioritization, summaries, alerts, and recommendations.</p>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<canvas id="renderCanvas"></canvas>
-<!-- Force browser to download fonts by using them in DOM -->
-<div style="position:absolute;opacity:0;pointer-events:none;font-size:1px;left:-9999px;">
-  <span style="font-family:'Gilroy';font-weight:500;">.</span>
-  <span style="font-family:'Gilroy';font-weight:400;">.</span>
-  <span style="font-family:'Gilroy';font-weight:600;">.</span>
-  <span style="font-family:'Parkinsans';font-weight:400;">.</span>
-  <span style="font-family:'Parkinsans';font-weight:500;">.</span>
-</div>
-
-<script>
-// ─── Template definitions ───────────────────────────────────────────────────
-// Figma canvas: ~1080px wide (standard social). We'll use 1080x1350 (4:5).
-// All Figma coords assumed from a 1080-wide frame.
-// Y positions scaled: Figma showed Y:615 on ~1350px tall frame.
-
-const CANVAS_W = 1080;
-const CANVAS_H = 1350;
-
-const TEMPLATES = [
-  {
-    id: 1,
-    thumb: 'thumbs/1.png',
-    name: 'Classic Chair',
-    positions: 1,
-    hasJD: false,
-    variants: [
-      { id: '1-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/1-1.png' },
-      { id: '1-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/1-2.png' },
-    ],
-    fields: [
-      { key: 'role',       label: 'Job Role',    placeholder: 'e.g. Product Designer', hint: null },
-      { key: 'experience', label: 'Experience',  placeholder: 'e.g. 2-4',  hint: 'Renders as "Experience: 2-4 Years"' },
-      { key: 'email',      label: 'Contact Email', placeholder: 'yourname@tezo.com', hint: null },
-    ],
-    // Text layers: positions from Figma (1080x1350 canvas)
-    layers: [
-      {
-        key: 'role',
-        x: 271, y: 615, w: 538,
-        font: 'Gilroy', weight: '500', size: 72,
-        align: 'center',
-      },
-      {
-        key: 'experience',
-        x: 359, y: 696, w: 362,
-        font: 'Gilroy', weight: '400', size: 40,
-        align: 'center',
-        prefix: 'Experience: ', suffix: ' Years',
-      },
-      {
-        key: 'email',
-        x: 395, y: 814, w: 291,
-        font: 'Parkinsans', weight: '400', size: 28,
-        align: 'center',
-      },
-    ],
-  },
-  {
-    id: 2,
-    thumb: 'thumbs/2.png',
-    name: 'Minimal Drop',
-    positions: 2,
-    hasJD: false,
-    variants: [
-      { id: '2-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/2-1.png' },
-      { id: '2-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/2-2.png' },
-    ],
-    fields: [
-      { key: 'role1',       label: 'Job Role 1',    placeholder: 'e.g. Product Designer', hint: null },
-      { key: 'experience1', label: 'Experience 1',  placeholder: 'e.g. 1-2', hint: 'Renders as "Experience: 1-2 Years"' },
-      { key: 'role2',       label: 'Job Role 2',    placeholder: 'e.g. Marketing Lead',   hint: null },
-      { key: 'experience2', label: 'Experience 2',  placeholder: 'e.g. 3-5', hint: 'Renders as "Experience: 3-5 Years"' },
-      { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com',     hint: null },
-    ],
-    layers: [
-      { key: 'role1',       x: 72,  y: 550,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517, lineHeight: 62 },
-      { key: 'experience1', x: 72,  y: 687,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'role2',       x: 72,  y: 777,  font: 'Gilroy',     weight: '500', size: 56, align: 'left', multiline: true, maxLines: 2, w: 517, lineHeight: 62 },
-      { key: 'experience2', x: 72,  y: 914,  font: 'Gilroy',     weight: '400', size: 40, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'email',       x: 87,  y: 1151, font: 'Parkinsans', weight: '400', size: 38, align: 'left' },
-    ],
-  },
-  {
-    id: 3,
-    thumb: 'thumbs/3.png',
-    name: 'Double Role',
-    positions: 1,
-    hasJD: true,
-    frameW: 1080, frameH: 1080,
-    variants: [
-      { id: '3-1', label: 'Variant 1', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/3-1.png' },
-      { id: '3-2', label: 'Variant 2', swatch: '#d4c5b0', textColor: '#212121', img: 'imgs/3-2.png' },
-    ],
-    fields: [
-      { key: 'role',       label: 'Job Role',        placeholder: 'e.g. Product Designer',            hint: null },
-      { key: 'experience', label: 'Experience',      placeholder: 'e.g. 1-2',                         hint: 'Renders as "Experience: 1-2 Years"' },
-      { key: 'jd',         label: 'Job Description', placeholder: 'Describe the role briefly...', hint: 'Max 275 characters · 5 lines', isTextarea: true, maxLength: 275 },
-      { key: 'email',      label: 'Contact Email',   placeholder: 'yourname@tezo.com',                hint: null },
-    ],
-    layers: [
-      { key: 'role',       x: 161, y: 491, font: 'Gilroy',     weight: '700', size: 44, align: 'left', color: '#E54A59', letterSpacing: -0.05 },
-      { key: 'experience', x: 161, y: 541, font: 'Gilroy',     weight: '400', size: 20, align: 'left', prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'jd',         x: 161, y: 595, font: 'Gilroy',     weight: '400', size: 16, align: 'left', multiline: true, w: 395, h: 115, lineHeight: 22 },
-      { key: 'email',      x: 152, y: 844, font: 'Parkinsans', weight: '400', size: 24, align: 'left' },
-    ],
-  },
-  {
-    id: 4,
-    thumb: 'thumbs/4.png',
-    name: 'Triple Roles',
-    positions: 2,
-    hasJD: false,
-    variants: [
-      { id: '4-1', label: 'Warm Beige', swatch: '#e8c9a0', textColor: '#212121', img: 'imgs/4-1.png' },
-      { id: '4-2', label: 'Dark',       swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/4-2.png' },
-    ],
-    fields: [
-      { key: 'role1', label: 'Job Role 1', placeholder: 'e.g. Product Designer', hint: 'Appears in red pill, 2 lines max' },
-      { key: 'role2', label: 'Job Role 2', placeholder: 'e.g. Marketing Lead',   hint: 'Appears in red pill, 2 lines max' },
-      { key: 'experience', label: 'Experience', placeholder: 'e.g. 1-2', hint: 'Renders as "1-2 Years"' },
-      { key: 'email', label: 'Contact Email', placeholder: 'yourname@tezo.com', hint: null },
-    ],
-    layers: [
-      { key: 'role1', x: 274, y: 481, font: 'Parkinsans', weight: '600', size: 28, align: 'center', color: '#ffffff', letterSpacing: -0.03, multiline: true, maxLines: 2, w: 188, lineHeight: 33, pill: { color: '#E54A59', padX: 75, padY: 20, radius: 110, shadow: true } },
-      { key: 'role2', x: 561, y: 666, font: 'Parkinsans', weight: '600', size: 28, align: 'center', color: '#ffffff', letterSpacing: -0.03, multiline: true, maxLines: 2, w: 188, lineHeight: 33, pill: { color: '#E54A59', padX: 75, padY: 20, radius: 110, shadow: true } },
-      { key: 'experience', x: 274, y: 981, font: 'Gilroy', weight: '600', size: 30, align: 'right', letterSpacing: -0.03, suffix: ' Years' },
-      { key: 'email', x: 486, y: 1257, font: 'Parkinsans', weight: '400', size: 28, align: 'left', letterSpacing: -0.03 },
-    ],
-  },
-  {
-    id: 5,
-    thumb: 'thumbs/5.png',
-    name: 'Full Listing',
-    positions: 3,
-    hasJD: false,
-    variants: [
-      { id: '5-1', label: 'Light', swatch: '#e8c9a0', textColor: '#000000', img: 'imgs/5-1.png' },
-      { id: '5-2', label: 'Dark',  swatch: '#2a2a35', textColor: '#ffffff', img: 'imgs/5-2.png' },
-    ],
-    fields: [
-      { key: 'role1',       label: 'Job Role 1',    placeholder: 'e.g. Product Designer', hint: 'First word breaks to 2nd line' },
-      { key: 'experience1', label: 'Experience 1',  placeholder: 'e.g. 1-2', hint: 'Renders as "Experience: 1-2 Years"' },
-      { key: 'role2',       label: 'Job Role 2',    placeholder: 'e.g. Marketing Lead',   hint: 'First word breaks to 2nd line' },
-      { key: 'experience2', label: 'Experience 2',  placeholder: 'e.g. 3-5', hint: 'Renders as "Experience: 3-5 Years"' },
-      { key: 'role3',       label: 'Job Role 3',    placeholder: 'e.g. Backend Engineer', hint: 'First word breaks to 2nd line' },
-      { key: 'experience3', label: 'Experience 3',  placeholder: 'e.g. 2-4', hint: 'Renders as "Experience: 2-4 Years"' },
-      { key: 'email',       label: 'Contact Email', placeholder: 'yourname@tezo.com', hint: null },
-    ],
-    layers: [
-      { key: 'role1',       x: 1019, y: 687,  font: 'Gilroy',     weight: '500', size: 36, align: 'right', letterSpacing: -0.03, lineHeight: 38, multiline: true, maxLines: 2, w: 259 },
-      { key: 'experience1', x: 1019, y: 770,  font: 'Gilroy',     weight: '400', size: 20, align: 'right', letterSpacing: -0.03, prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'role2',       x: 1019, y: 832,  font: 'Gilroy',     weight: '500', size: 36, align: 'right', letterSpacing: -0.03, lineHeight: 38, multiline: true, maxLines: 2, w: 259 },
-      { key: 'experience2', x: 1019, y: 915,  font: 'Gilroy',     weight: '400', size: 20, align: 'right', letterSpacing: -0.03, prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'role3',       x: 1019, y: 974,  font: 'Gilroy',     weight: '500', size: 36, align: 'right', letterSpacing: -0.03, lineHeight: 38, multiline: true, maxLines: 2, w: 259 },
-      { key: 'experience3', x: 1019, y: 1057, font: 'Gilroy',     weight: '400', size: 20, align: 'right', letterSpacing: -0.03, prefix: 'Experience: ', suffix: ' Years' },
-      { key: 'email',       x: 382,  y: 1216, font: 'Parkinsans', weight: '600', size: 24, align: 'left',  letterSpacing: -0.03, color: '#ffffff' },
-    ],
-  },
-];
-
-// ─── State ───────────────────────────────────────────────────────────────────
-let activeFilter = 'all';
-let jdOnly = false;
-let selectedTemplate = null;
-let selectedVariant = 0;
-let generatedDataURL = null;
-
-// ─── DOM refs ────────────────────────────────────────────────────────────────
-const grid = document.getElementById('templatesGrid');
-const editorOverlay = document.getElementById('editorOverlay');
-const editorBackdrop = document.getElementById('editorBackdrop');
-const previewOverlay = document.getElementById('previewOverlay');
-const previewImg = document.getElementById('previewImg');
-const formFields = document.getElementById('formFields');
-const panelTitle = document.getElementById('panelTitle');
-const panelSubtitle = document.getElementById('panelSubtitle');
-const canvas = document.getElementById('renderCanvas');
-const ctx = canvas.getContext('2d');
-
-// ─── Render grid ─────────────────────────────────────────────────────────────
-function renderGrid() {
-  const filtered = TEMPLATES.filter(t => {
-    if (activeFilter !== 'all' && String(t.positions) !== activeFilter) return false;
-    if (jdOnly && !t.hasJD) return false;
-    return true;
-  });
-
-  grid.innerHTML = '';
-  if (!filtered.length) {
-    grid.innerHTML = '<div class="empty-state">No templates match the current filters.</div>';
-    return;
-  }
-
-  filtered.forEach(t => {
-    const card = document.createElement('div');
-    card.className = 'template-card';
-    card.dataset.id = t.id;
-
-    const badgeClass = t.positions === 1 ? 'badge-roles-1' : t.positions === 2 ? 'badge-roles-2' : 'badge-roles-3';
-    const posLabel = t.positions === 1 ? '1 position' : `${t.positions} positions`;
-
-    card.innerHTML = `
-      <div class="selected-check">
-        <svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Use Cases</div>
+      <h2 class="title">Where it goes to work</h2>
+      <p class="section-sub">From the production line to back-office operations, automate the processes that run your plant.</p>
+    </div>
+    <div class="grid g-4">
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M4 20V8l5 4V8l5 4V8l5 4v8M9 20v-4M15 20v-4"/></svg></div>
+        <h3>Production workflows</h3>
+        <p>Automate production approvals, status updates, issue routing, and task handoffs.</p>
       </div>
-      <img class="template-thumb" src="${t.thumb || t.variants[0].img}" alt="${t.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="template-thumb-placeholder" style="display:none">${t.name}</div>
-      <div class="template-info">
-        <div>
-          <div class="template-name">${t.name}</div>
-          <div style="display:flex;gap:5px;margin-top:4px;align-items:center;">
-            <span class="template-badge ${badgeClass}">${posLabel}</span>
-            ${t.hasJD ? '<span class="template-badge" style="background:rgba(60,180,120,0.1);color:#5cb88a;">+ JD</span>' : ''}
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg></div>
+        <h3>Quality processes</h3>
+        <p>Digitize inspections, non-conformance workflows, corrective actions, and approvals.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2.4-.6-.6-2.4 2.7-2.7z"/></svg></div>
+        <h3>Maintenance requests</h3>
+        <p>Streamline request intake, assignment, escalation, SLA tracking, and closure.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.59 16.73A2 2 0 0 1 2 15.31V8.69a2 2 0 0 1 .59-1.42l4.68-4.68A2 2 0 0 1 8.69 2h6.62a2 2 0 0 1 1.42.59l4.68 4.68A2 2 0 0 1 22 8.69v6.62a2 2 0 0 1-.59 1.42l-4.68 4.68a2 2 0 0 1-1.42.59H8.69a2 2 0 0 1-1.42-.59z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
+        <h3>Operations exceptions</h3>
+        <p>Track delays, ownership, risk, and next actions across teams and systems.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" style="background:var(--bg-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">See It In Action</div>
+      <h2 class="title">One workspace for every operational view</h2>
+      <p class="section-sub">From live dashboards to Teams-native alerts — explore how the solution surfaces what matters.</p>
+    </div>
+    <div class="gallery reveal">
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-i="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h8v8H3zM13 3h8v5h-8zM13 12h8v9h-8zM3 15h8v6H3z"/></svg>
+          <span class="lbl">Dashboard view<small>Live operational overview</small></span>
+        </div>
+        <div class="tab" data-i="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><path d="M7 11v3a2 2 0 0 0 2 2h4"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+          <span class="lbl">Workflow view<small>Every stage &amp; owner</small></span>
+        </div>
+        <div class="tab" data-i="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          <span class="lbl">Exception view<small>Risks &amp; next actions</small></span>
+        </div>
+        <div class="tab" data-i="3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="lbl">Teams alerts<small>Approvals in Microsoft Teams</small></span>
+        </div>
+        <div class="tab" data-i="4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
+          <span class="lbl">Analytics view<small>Trends &amp; performance</small></span>
+        </div>
+      </div>
+
+      <div class="panels" id="panels">
+        <!-- 0 -->
+        <div class="panel active">
+          <div class="screenshot">
+            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Operations Dashboard</div></div>
+            <div class="ss-body">
+              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h8v8H3zM13 3h8v5h-8zM13 12h8v9h-8zM3 15h8v6H3z"/></svg></div>
+              <div class="ph-label">Screenshot placeholder</div>
+              <div class="ph-note">Drop the Dashboard screenshot here (16:9).</div>
+            </div>
+          </div>
+          <div class="panel-desc"><h3>Dashboard view</h3><p>Real-time visibility into active workflows, exceptions, SLA risks, and operational performance.</p></div>
+        </div>
+        <!-- 1 -->
+        <div class="panel">
+          <div class="screenshot">
+            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Workflow Tracker</div></div>
+            <div class="ss-body">
+              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><path d="M7 11v3a2 2 0 0 0 2 2h4"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></div>
+              <div class="ph-label">Screenshot placeholder</div>
+              <div class="ph-note">Drop the Workflow screenshot here (16:9).</div>
+            </div>
+          </div>
+          <div class="panel-desc"><h3>Workflow view</h3><p>Track every process stage, owner, approval, dependency, and status update.</p></div>
+        </div>
+        <!-- 2 -->
+        <div class="panel">
+          <div class="screenshot">
+            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Exception Center</div></div>
+            <div class="ss-body">
+              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+              <div class="ph-label">Screenshot placeholder</div>
+              <div class="ph-note">Drop the Exception screenshot here (16:9).</div>
+            </div>
+          </div>
+          <div class="panel-desc"><h3>Exception view</h3><p>Identify delayed tasks, high-risk items, and recommended next actions.</p></div>
+        </div>
+        <!-- 3 -->
+        <div class="panel">
+          <div class="screenshot">
+            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Microsoft Teams · Tezo Alerts</div></div>
+            <div class="ss-body">
+              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+              <div class="ph-label">Screenshot placeholder</div>
+              <div class="ph-note">Drop the Teams alerts screenshot here (16:9).</div>
+            </div>
+          </div>
+          <div class="panel-desc"><h3>Teams alerts</h3><p>Bring approvals, notifications, and escalations directly into Microsoft Teams.</p></div>
+        </div>
+        <!-- 4 -->
+        <div class="panel">
+          <div class="screenshot">
+            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Process Analytics</div></div>
+            <div class="ss-body">
+              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div>
+              <div class="ph-label">Screenshot placeholder</div>
+              <div class="ph-note">Drop the Analytics screenshot here (16:9).</div>
+            </div>
+          </div>
+          <div class="panel-desc"><h3>Analytics view</h3><p>Measure cycle times, bottlenecks, volumes, and process performance trends.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MICROSOFT -->
+<section id="microsoft">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Better Together</div>
+      <h2 class="title">Built for the Microsoft Cloud you already run</h2>
+      <p class="section-sub">Designed to work natively with the Microsoft ecosystem manufacturers already use.</p>
+    </div>
+    <div class="ms-band reveal">
+      <div class="eyebrow" style="margin-bottom:14px">Microsoft Technologies</div>
+      <div class="ms-logos">
+        <div class="ms-logo"><img src="1.png" alt="Azure"></div>
+        <div class="ms-logo"><img src="2.png" alt="Dynamics 365"></div>
+        <div class="ms-logo"><img src="3.png" alt="Power Platform"></div>
+        <div class="ms-logo"><img src="4.png" alt="Power BI"></div>
+        <div class="ms-logo"><img src="5.png" alt="Microsoft Teams"></div>
+        <div class="ms-logo"><img src="6.png" alt="Dataverse"></div>
+        <div class="ms-logo"><img src="7.png" alt="SharePoint"></div>
+      </div>
+      <div class="why-matters">
+        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Faster implementation</div>
+        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>Lower integration risk</div>
+        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="M6 6.5h.01"/><path d="M9 6.5h.01"/></svg>Familiar user experience</div>
+        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Enterprise-grade security</div>
+        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>Scalable foundation for AI</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section id="outcomes" style="background:var(--bg-2);border-block:1px solid var(--border)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Business Outcomes</div>
+      <h2 class="title">Measurable impact across the operation</h2>
+    </div>
+    <div class="grid g-2">
+      <div class="outcome reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 12h8"/></svg></div>
+        <div><h3>Reduce manual effort</h3><p>Automate repetitive tasks and follow-ups.</p></div>
+      </div>
+      <div class="outcome reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div><h3>Improve process visibility</h3><p>Know what is happening, who owns it, and where delays exist.</p></div>
+      </div>
+      <div class="outcome reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div><h3>Accelerate decisions</h3><p>Surface risks, exceptions, and next actions faster.</p></div>
+      </div>
+      <div class="outcome reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><h3>Strengthen accountability</h3><p>Create a clear audit trail across actions, approvals, and ownership.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY TEZO -->
+<section id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Why Tezo</div>
+      <h2 class="title">Manufacturing automation, done right</h2>
+    </div>
+    <div class="why-list">
+      <div class="why-item reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.3 7L12 12l8.7-5M12 22V12"/></svg></div>
+        <span>Manufacturing-focused automation accelerators</span>
+      </div>
+      <div class="why-item reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+        <span>Microsoft-native architecture</span>
+      </div>
+      <div class="why-item reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3 3 3 0 0 0-3 4 3 3 0 0 0 0 6 3 3 0 0 0 3 4 3 3 0 0 0 6 0 3 3 0 0 0 3-4 3 3 0 0 0 0-6 3 3 0 0 0-3-4 3 3 0 0 0-3-3zM12 5v14"/></svg></div>
+        <span>AI-enabled workflow intelligence</span>
+      </div>
+      <div class="why-item reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/></svg></div>
+        <span>Integration-first approach — no rip and replace</span>
+      </div>
+      <div class="why-item reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></svg></div>
+        <span>Flexible rollout across plants, teams, and processes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section style="padding-top:40px">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="eyebrow" style="justify-content:center">Get Started</div>
+      <h2>Ready to modernize manufacturing operations?</h2>
+      <p>Start with one high-impact workflow. Prove value quickly. Scale across your manufacturing enterprise.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Request a Demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="https://www.tezo.com/contact-us" class="btn btn-ghost">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding-top:60px">
+  <div class="wrap">
+    <div class="form-wrap">
+      <div class="reveal">
+        <div class="eyebrow">Let's Talk</div>
+        <h2 class="title">Tell us about your operation</h2>
+        <p class="section-sub">Share a few details and our team will show you how AI-powered process automation can drive measurable results.</p>
+        <div class="contact-points">
+          <div class="cp">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div><h4>Talk to an expert</h4><p>Get a tailored walkthrough for your workflows.</p></div>
+          </div>
+          <div class="cp">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM22 6l-10 7L2 6"/></svg></div>
+            <div><h4>Prefer email?</h4><p>Reach us anytime and we'll respond within one business day.</p></div>
+          </div>
+          <div class="cp">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11a8 8 0 1 0-16 0c0 6.5 8 11 8 11z"/><circle cx="12" cy="11" r="3"/></svg></div>
+            <div><h4>Built for global teams</h4><p>Rollout support across plants and regions.</p></div>
           </div>
         </div>
-        <div class="color-dots">
-          ${t.variants.map((v,i) => `<div class="color-dot ${i===0?'active':''}" style="background:${v.swatch}" data-tid="${t.id}" data-vi="${i}"></div>`).join('')}
+      </div>
+
+      <div class="form-card reveal">
+        <form id="leadForm" novalidate>
+          <div class="row">
+            <div class="field">
+              <label>Name <span class="req">*</span></label>
+              <input type="text" name="name" required placeholder="Your full name">
+            </div>
+            <div class="field">
+              <label>Business Email <span class="req">*</span></label>
+              <input type="email" name="email" required placeholder="you@company.com">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Company</label>
+              <input type="text" name="company" placeholder="Company name">
+            </div>
+            <div class="field">
+              <label>Job Title</label>
+              <input type="text" name="title" placeholder="Your role">
+            </div>
+          </div>
+          <div class="field">
+            <label>Area of Interest</label>
+            <select name="interest">
+              <option value="">Select an area</option>
+              <option>Production workflows</option>
+              <option>Quality processes</option>
+              <option>Maintenance requests</option>
+              <option>Operations exceptions</option>
+              <option>Analytics &amp; reporting</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Message</label>
+            <textarea name="message" placeholder="What would you like to automate?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Request a Demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3"/></svg>
+          <h3>Thanks — we've got it.</h3>
+          <p>Our team will reach out shortly to schedule your demo.</p>
         </div>
       </div>
-    `;
-
-    card.addEventListener('click', (e) => {
-      if (e.target.classList.contains('color-dot')) return;
-      openEditor(t.id);
-    });
-    grid.appendChild(card);
-  });
-
-  // color dot clicks
-  grid.querySelectorAll('.color-dot').forEach(dot => {
-    dot.addEventListener('click', e => {
-      e.stopPropagation();
-      const card = dot.closest('.template-card');
-      const t = TEMPLATES.find(x => x.id === Number(dot.dataset.tid));
-      const vi = Number(dot.dataset.vi);
-      const img = card.querySelector('.template-thumb');
-      img.src = t.variants[vi].img;
-      card.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-      dot.classList.add('active');
-    });
-  });
-}
-
-// ─── Filters ─────────────────────────────────────────────────────────────────
-document.querySelectorAll('.chip[data-filter]').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('.chip[data-filter]').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    activeFilter = chip.dataset.filter;
-    renderGrid();
-  });
-});
-
-document.getElementById('jdFilter').addEventListener('click', function() {
-  jdOnly = !jdOnly;
-  this.classList.toggle('active', jdOnly);
-  renderGrid();
-});
-
-// ─── Editor open/close ────────────────────────────────────────────────────────
-function openEditor(templateId) {
-  selectedTemplate = TEMPLATES.find(t => t.id === templateId);
-  selectedVariant = 0;
-  renderEditorContent();
-  editorOverlay.classList.add('open');
-
-  // mark card
-  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
-  const card = document.querySelector(`.template-card[data-id="${templateId}"]`);
-  if (card) card.classList.add('selected');
-}
-
-function closeEditor() {
-  editorOverlay.classList.remove('open');
-  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
-}
-
-document.getElementById('closeEditor').addEventListener('click', closeEditor);
-editorBackdrop.addEventListener('click', closeEditor);
-
-function renderEditorContent() {
-  const t = selectedTemplate;
-  panelTitle.textContent = t.name;
-  panelSubtitle.textContent = `${t.positions} open position${t.positions>1?'s':''} · ${t.hasJD ? 'With job description' : 'No job description'}`;
-
-  // variant buttons
-  const variantRow = document.querySelector('.variant-row');
-  variantRow.innerHTML = t.variants.map((v,i) => `
-    <button class="variant-btn ${i===0?'active':''}" data-variant="${i}">
-      <span class="variant-swatch" style="background:${v.swatch};"></span>
-      ${v.label}
-    </button>
-  `).join('');
-  variantRow.querySelectorAll('.variant-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      variantRow.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedVariant = Number(btn.dataset.variant);
-    });
-  });
-
-  // form fields
-  formFields.innerHTML = t.fields.map(f => `
-    <div class="form-field">
-      <label class="form-label" for="field_${f.key}">${f.label}</label>
-      ${f.isTextarea
-        ? `<textarea class="form-input" id="field_${f.key}" placeholder="${f.placeholder}" rows="4" ${f.maxLength ? `maxlength="${f.maxLength}"` : ''}
-            oninput="document.getElementById('counter_${f.key}').textContent = this.value.length + '/${f.maxLength || 999}'"
-          ></textarea>
-          ${f.maxLength ? `<div class="form-hint" id="counter_${f.key}" style="text-align:right;">0/${f.maxLength}</div>` : ''}`
-        : `<input class="form-input" id="field_${f.key}" type="text" placeholder="${f.placeholder}">`
-      }
-      ${f.hint ? `<div class="form-hint">→ ${f.hint}</div>` : ''}
     </div>
-  `).join('');
-}
+  </div>
+</section>
 
-// ─── Generate ─────────────────────────────────────────────────────────────────
-document.getElementById('generateBtn').addEventListener('click', generateImage);
+<script>
+  // tab gallery
+  const tabs = document.querySelectorAll('#tabs .tab');
+  const panels = document.querySelectorAll('#panels .panel');
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    const i = t.dataset.i;
+    tabs.forEach(x=>x.classList.remove('active'));
+    panels.forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    panels[i].classList.add('active');
+  }));
 
-async function generateImage() {
-  const t = selectedTemplate;
-  const variant = t.variants[selectedVariant];
-  const btn = document.getElementById('generateBtn');
-
-  // collect field values
-  const values = {};
-  t.fields.forEach(f => {
-    values[f.key] = document.getElementById(`field_${f.key}`)?.value?.trim() || '';
+  // scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach((el,idx)=>{
+    el.style.transitionDelay = (idx % 4 * 0.06) + 's';
+    io.observe(el);
   });
 
-  btn.textContent = 'Generating…';
-  btn.disabled = true;
-
-  // Force-load all required fonts before drawing to canvas
-  try {
-    await Promise.all([
-      document.fonts.load('500 72px "Gilroy"'),
-      document.fonts.load('400 40px "Gilroy"'),
-      document.fonts.load('400 28px "Parkinsans"'),
-      document.fonts.load('400 24px "Parkinsans"'),
-      document.fonts.load('700 44px "Gilroy"'),
-      document.fonts.load('400 20px "Gilroy"'),
-      document.fonts.load('400 16px "Gilroy"'),
-      document.fonts.load('400 38px "Parkinsans"'),
-      document.fonts.load('500 56px "Gilroy"'),
-      document.fonts.load('400 40px "Gilroy"'),
-    ]);
-  } catch(e) { console.warn('Font preload warning:', e); }
-
-  canvas.width = CANVAS_W;
-  canvas.height = CANVAS_H;
-
-  const img = new Image();
-  img.onload = () => {
-    // Use actual image dimensions so coordinates scale correctly
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
-
-    // Scale factors: use template's own Figma frame size if defined
-    const figmaW = t.frameW || CANVAS_W;
-    const figmaH = t.frameH || CANVAS_H;
-    const scaleX = canvas.width / figmaW;
-    const scaleY = canvas.height / figmaH;
-
-    t.layers.forEach(layer => {
-      const raw = values[layer.key] || '';
-      console.log('Drawing layer:', layer.key, '=', raw, 'at scaled', Math.round(layer.x*scaleX), Math.round(layer.y*scaleY));
-      if (!raw) return;
-
-      let text = raw;
-      if (layer.prefix) text = layer.prefix + text;
-      if (layer.suffix) text = text + layer.suffix;
-
-      const sx = layer.x * scaleX;
-      const sy = layer.y * scaleY;
-      const sSize = layer.size * scaleX;
-      const sMaxW = (layer.w || CANVAS_W - layer.x * 2) * scaleX;
-
-      ctx.save();
-      ctx.font = `${layer.weight} ${sSize}px "${layer.font}", sans-serif`;
-      const lsMultiplier = layer.letterSpacing !== undefined ? layer.letterSpacing : -0.03;
-      ctx.letterSpacing = `${lsMultiplier * sSize}px`;
-
-      // Draw pill background if defined
-      if (layer.pill) {
-        const p = layer.pill;
-        const maxTextW = 200 * scaleX; // max text width before wrapping
-        const lineH = layer.lineHeight ? layer.lineHeight * scaleX : sSize * 1.2;
-
-        // Word wrap at 200px
-        const words = text.trim().replace(/\s+/g, ' ').split(' ');
-        let lines = [];
-        let line = '';
-        words.forEach(word => {
-          const test = line + (line ? ' ' : '') + word;
-          if (ctx.measureText(test).width > maxTextW && line) {
-            lines.push(line);
-            line = word;
-          } else {
-            line = test;
-          }
-        });
-        if (line) lines.push(line);
-        lines = lines.slice(0, 2); // max 2 lines
-
-        // Pill dimensions: text width + padX on each side, text height + padY top/bottom
-        const maxLineW = Math.max(...lines.map(l => ctx.measureText(l).width));
-        const pillW = maxLineW + p.padX * 2 * scaleX;
-        const pillH = (lineH * lines.length) + p.padY * 2 * scaleY;
-        const pillR = Math.min(p.radius * scaleX, pillH / 2);
-
-        // Draw shadow
-        if (p.shadow) {
-          ctx.shadowColor = 'rgba(0,0,0,0.2)';
-          ctx.shadowBlur = 16 * scaleX;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 6 * scaleY;
-        }
-
-        // Draw pill
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.roundRect(sx, sy, pillW, pillH, pillR);
-        ctx.fill();
-
-        // Reset shadow
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
-        ctx.shadowOffsetY = 0;
-
-        // Draw text centered in pill
-        ctx.fillStyle = layer.color || '#ffffff';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        const textCx = sx + pillW / 2;
-        const textStartY = sy + p.padY * scaleY;
-        lines.forEach((l, i) => ctx.fillText(l, textCx, textStartY + i * lineH));
-        ctx.restore();
-        return;
-      }
-
-      ctx.fillStyle = layer.color || variant.textColor;
-      ctx.textAlign = layer.align || 'center';
-      ctx.textBaseline = 'top';
-      const cx = layer.align === 'center' ? canvas.width / 2 : sx;
-
-      if (layer.multiline) {
-        const words = text.trim().replace(/\s+/g, ' ').split(' ');
-        const lineHeight = sSize * 1.1; // fallback only, overridden below if layer.lineHeight set
-        let lines = [];
-        if (layer.maxLines === 2 && words.length > 1) {
-          // Always break after first word, rest on line 2
-          lines = [words[0], words.slice(1).join(' ')];
-        } else {
-          let line = '';
-          words.forEach(word => {
-            const test = line + (line ? ' ' : '') + word;
-            if (ctx.measureText(test).width > sMaxW && line) {
-              lines.push(line);
-              line = word;
-            } else {
-              line = test;
-            }
-          });
-          if (line) lines.push(line);
-        }
-        // lineHeight from Figma is total line box (font size + leading)
-        // Scale it the same way as font size
-        const scaledLH = layer.lineHeight ? layer.lineHeight * scaleX : lineHeight;
-        const maxH = layer.h ? layer.h * scaleY : Infinity;
-        lines.forEach((l, i) => {
-          const lineY = sy + i * scaledLH;
-          if (maxH === Infinity || lineY + scaledLH <= sy + maxH) ctx.fillText(l, cx, lineY);
-        });
-      } else {
-        ctx.fillText(text, cx, sy);
-      }
-      ctx.restore();
+  // hero load
+  window.addEventListener('load',()=>{
+    document.querySelectorAll('.hero .reveal').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('in'), 120 + i*110);
     });
+  });
 
-    generatedDataURL = canvas.toDataURL('image/png');
-    previewImg.src = generatedDataURL;
-    document.getElementById('downloadBtn').onclick = () => {
-      const a = document.createElement('a');
-      a.href = generatedDataURL;
-      a.download = `tezo-hiring-${t.name.toLowerCase().replace(/\s+/g,'-')}-${variant.id}.png`;
-      a.click();
-    };
-
-    btn.textContent = 'Generate Image →';
-    btn.disabled = false;
-    closeEditor();
-    previewOverlay.classList.add('open');
-  };
-  img.onerror = () => {
-    btn.textContent = 'Generate Image →';
-    btn.disabled = false;
-    alert('Could not load template image. Make sure imgs/ folder is alongside index.html.');
-  };
-  img.src = variant.img;
-}
-
-// ─── Preview close ────────────────────────────────────────────────────────────
-document.getElementById('closePreview').addEventListener('click', () => {
-  previewOverlay.classList.remove('open');
-});
-previewOverlay.addEventListener('click', (e) => {
-  if (e.target === previewOverlay) previewOverlay.classList.remove('open');
-});
-
-// ─── Init ─────────────────────────────────────────────────────────────────────
-renderGrid();
+  // form
+  document.getElementById('leadForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!this.checkValidity()){ this.reportValidity(); return; }
+    this.style.display='none';
+    document.getElementById('formSuccess').style.display='block';
+  });
 </script>
 </body>
 </html>
