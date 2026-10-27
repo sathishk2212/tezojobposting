@@ -1,672 +1,1032 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manufacturing Process Automation Solution | Tezo</title>
-<meta name="description" content="Tezo helps manufacturers automate workflows, improve process visibility, and modernize operations with AI-powered process automation built on Microsoft Cloud.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tezo | Modernize banking and insurance workflows</title>
+<meta name="description" content="Product Engineering, Data Engineering and governed AI for banks, insurers and credit unions.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    /* ---- Tezo brand dark palette ---- */
-    --bg:        #0B0A11;
-    --bg-2:      #110F19;
-    --surface:   #16131F;
-    --surface-2: #1D1A2B;
-    --border:    rgba(255,255,255,0.09);
-    --border-2:  rgba(255,255,255,0.16);
-    --text:      #F0EEF6;
-    --muted:     #9F99B0;
-    --muted-2:   #6F6982;
-    --accent:    #e54a59;   /* primary — buttons & highlights */
-    --accent-2:  #b0a8fe;   /* complement */
-    --accent-dim: rgba(229,74,89,0.14);
-    --secondary: #4e3aad;   /* solid cards */
-    --secondary-light: #b0a8fe;
-    --radius:    16px;
-    --radius-sm: 12px;
-    --maxw:      1180px;
-    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
+/* ===================== HERO (from index.html) ===================== */
 
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:var(--font);
-    background:var(--bg);
-    color:var(--text);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit;text-decoration:none}
+:root{
+  --sky-top:#F7EBDF; --sky-mid:#F1DDCC; --sky-low:#E6C9B4;
+  --beige:#E8DCCC; --ink:#1E1E1E; --red:#E54A59; --coral:#EE6F76; --line:rgba(30,30,30,.32);
+  --gutter:clamp(16px,4vw,72px);     /* distance of the margin lines from the screen edge (as original) */
+  --bank-top:470px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  /* tuning knobs */
+  --cloud1-opacity:.8; --cloud2-opacity:.7;
+  --mono-opacity:1; --mono-speed:120s;   /* monogram rotation: higher = slower */
+  --video-opacity:.6; --video-blend:normal;  /* background.webm */
+  --cloud-blend:normal;                       /* use 'screen' if the cloud PNGs have a BLACK background */
+  --tint-opacity:1;                          /* red haze behind the bank: 0 = off */
+  --glow-w:900px; --glow-h:600px; --rim-radius:520px;
+  --veil:rgba(236,218,202,.97);       /* soft light behind the sub text over the steps */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:4px}
 
-  /* atmosphere */
-  .glow{position:fixed;pointer-events:none;z-index:0;filter:blur(80px);opacity:.5}
-  .glow-1{top:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(229,74,89,0.16),transparent 70%)}
-  .glow-2{top:900px;left:-250px;width:600px;height:600px;background:radial-gradient(circle,rgba(78,58,173,0.22),transparent 70%)}
+.hero{position:relative;height:100svh;min-height:700px;overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(55% 45% at 50% 30%,rgba(255,255,255,.75) 0%,rgba(255,255,255,0) 70%),
+    linear-gradient(to bottom,var(--sky-top) 0%,var(--sky-mid) 55%,var(--sky-low) 100%)}
 
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+/* ---------- scene layers ---------- */
+.layer{position:absolute;inset:0;pointer-events:none;will-change:transform}
+.video{opacity:var(--video-opacity);mix-blend-mode:var(--video-blend)}
+.video video{position:absolute;left:-8%;top:0;width:116%;height:100%;object-fit:cover;object-position:center bottom}
+.cloud{mix-blend-mode:var(--cloud-blend)}
+.cloud img{position:absolute;left:-8%;top:0;width:116%;height:100%;object-fit:cover;object-position:center top;animation:drift 50s ease-in-out infinite alternate}
+.cloud2 img{animation-duration:38s;animation-direction:alternate-reverse}
+.cloud1.fallback{background:radial-gradient(38% 16% at 14% 30%,rgba(255,255,255,.8),rgba(255,255,255,0) 70%),radial-gradient(34% 14% at 86% 24%,rgba(255,255,255,.7),rgba(255,255,255,0) 70%),radial-gradient(45% 13% at 50% 40%,rgba(255,248,240,.6),rgba(255,248,240,0) 70%)}
+.cloud2.fallback{background:radial-gradient(30% 10% at 28% 18%,rgba(255,244,236,.7),rgba(255,244,236,0) 70%),radial-gradient(32% 11% at 72% 36%,rgba(255,236,228,.65),rgba(255,236,228,0) 70%)}
+.cloud1{opacity:var(--cloud1-opacity)} .cloud2{opacity:var(--cloud2-opacity)}
+@keyframes drift{from{transform:translateX(-2.5%) scale(1.04)}to{transform:translateX(2.5%) scale(1.1)}}
 
-  /* ---------- NAV ---------- */
-  nav{
-    position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(14px);
-    background:rgba(7,11,16,0.72);
-    border-bottom:1px solid var(--border);
-  }
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:22px;letter-spacing:-.5px}
-  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
-  .nav-links{display:flex;gap:32px;align-items:center;font-size:14.5px;color:var(--muted);font-weight:500}
-  .nav-links a:hover{color:var(--text)}
-  .nav-cta{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;border:1px solid var(--border-2);padding:9px 18px;border-radius:99px;font-size:14px;font-weight:600;color:var(--text);transition:.25s}
-  .nav-cta svg{width:16px;height:16px;flex-shrink:0}
-  .nav-cta:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-  @media(max-width:860px){.nav-links{display:none}}
 
-  /* ---------- BUTTONS ---------- */
-  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;padding:14px 26px;border-radius:99px;cursor:pointer;border:1px solid transparent;transition:.25s;font-family:var(--font)}
-  .btn-primary{background:var(--accent);color:#fff}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(229,74,89,0.32)}
-  .btn-ghost{background:transparent;border-color:var(--border-2);color:var(--text)}
-  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-  .btn svg{width:17px;height:17px}
+.glow{position:absolute;left:0;top:0;width:var(--glow-w);height:var(--glow-h);pointer-events:none;will-change:transform;
+  background:radial-gradient(closest-side,rgba(238,111,118,.55) 0%,rgba(238,111,118,.32) 25%,rgba(238,150,140,.12) 55%,rgba(238,150,140,0) 100%)}
 
-  /* ---------- SECTION PRIMITIVES ---------- */
-  section{padding:104px 0;position:relative}
-  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
-  .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);opacity:.6}
-  h2.title{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-1px;line-height:1.12;max-width:760px}
-  .section-sub{color:var(--muted);font-size:17px;max-width:620px;margin-top:18px}
-  .section-head{margin-bottom:54px}
+/* bank: anchored to the bottom so the steps run off the edge */
+.bank-layer{inset:auto;left:0;right:0;top:var(--bank-top)}
+.bank{position:relative;width:100%;line-height:0}
+.bank img.main{display:block;width:100%;height:auto;position:relative}
+.tint{position:absolute;left:50%;top:-2%;width:135%;height:105%;transform:translateX(-50%);pointer-events:none;opacity:var(--tint-opacity);
+  background:
+    radial-gradient(ellipse 34% 40% at 50% 42%,rgba(229,74,89,.30) 0%,rgba(229,74,89,.12) 55%,rgba(229,74,89,0) 100%),
+    radial-gradient(ellipse 50% 36% at 50% 52%,rgba(229,74,89,.20) 0%,rgba(229,74,89,.08) 55%,rgba(229,74,89,0) 100%);
+  filter:blur(24px)}
+.monogram{position:absolute;left:50%;top:2%;width:40%;margin-left:-20%;aspect-ratio:1;object-fit:contain;opacity:var(--mono-opacity);will-change:transform;animation:spin var(--mono-speed) linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bank .rim{position:absolute;inset:0;width:100%;height:100%;opacity:var(--rim-a,.45);
+  -webkit-mask-image:radial-gradient(circle var(--rim-radius) at var(--rx,50%) var(--ry,50%),#000 0%,rgba(0,0,0,.6) 40%,rgba(0,0,0,0) 100%);
+  mask-image:radial-gradient(circle var(--rim-radius) at var(--rx,50%) var(--ry,50%),#000 0%,rgba(0,0,0,.6) 40%,rgba(0,0,0,0) 100%)}
 
-  /* ---------- HERO ---------- */
-  .hero{padding:120px 0 96px;text-align:center}
-  .chip{display:inline-flex;align-items:center;gap:8px;background:var(--accent-dim);border:1px solid rgba(229,74,89,0.3);color:var(--accent);padding:8px 16px;border-radius:99px;font-size:13px;font-weight:600;margin-bottom:30px}
-  .chip svg{width:15px;height:15px}
-  .hero h1{font-size:clamp(36px,6vw,68px);font-weight:800;letter-spacing:-2px;line-height:1.05;max-width:900px;margin:0 auto}
-  .hero h1 .grad{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .hero p.lead{color:var(--muted);font-size:19px;max-width:660px;margin:26px auto 14px;line-height:1.65}
-  .hero .built{color:var(--muted-2);font-size:15px;font-weight:500;margin-bottom:36px}
-  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.veil{position:absolute;left:0;right:0;bottom:0;height:40%;pointer-events:none;background:linear-gradient(to top,var(--veil) 0%,rgba(236,218,202,.78) 40%,rgba(236,218,202,0) 100%)}
 
-  /* ---------- GRID CARDS ---------- */
-  .grid{display:grid;gap:20px}
-  .g-3{grid-template-columns:repeat(3,1fr)}
-  .g-4{grid-template-columns:repeat(4,1fr)}
-  .g-2{grid-template-columns:repeat(2,1fr)}
-  @media(max-width:980px){.g-3,.g-4{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:640px){.g-2,.g-3,.g-4{grid-template-columns:1fr}}
+/* ---------- grid lines (vertical margins + horizontal rules, "+" at crossings) ---------- */
+.grid-lines{position:absolute;inset:0;pointer-events:none;
+  z-index:5;--lc:rgba(30,30,30,.2); --g:var(--gutter); --h1:44px; --h2:calc(100% - 1px)}
+.grid-lines i{position:absolute;background:var(--lc)}
+.grid-lines .v{top:0;bottom:0;width:1px;transform-origin:top;animation:glV 1.6s var(--ease) both}
+.grid-lines .v1{left:var(--g)} .grid-lines .v2{right:var(--g);animation-delay:.12s}
+.grid-lines .h{left:0;right:0;height:1px;transform-origin:left;animation:glH 1.8s var(--ease) both}
+.grid-lines .h1{top:var(--h1);animation-delay:.25s} .grid-lines .h2{top:var(--h2);animation-delay:.4s}
+.grid-lines b{position:absolute;width:11px;height:11px;margin:-5px 0 0 -5px;opacity:0;animation:glP .6s 1.6s forwards}
+.grid-lines b::before,.grid-lines b::after{content:"";position:absolute;background:rgba(30,30,30,.55)}
+.grid-lines b::before{left:5px;top:0;width:1px;height:11px}
+.grid-lines b::after{top:5px;left:0;height:1px;width:11px}
+.grid-lines .p1{left:var(--g);top:var(--h1)} .grid-lines .p2{left:calc(100% - var(--g));top:var(--h1)}
+.grid-lines .p3{left:var(--g);top:var(--h2)} .grid-lines .p4{left:calc(100% - var(--g));top:var(--h2)}
+@keyframes glV{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes glH{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes glP{to{opacity:1}}
 
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:30px;transition:.3s;position:relative;overflow:hidden}
-  .card:hover{border-color:var(--border-2);transform:translateY(-4px);background:var(--surface-2)}
-  .card .ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--accent-dim);border:1px solid rgba(229,74,89,0.2);margin-bottom:20px}
-  .card .ico svg{width:23px;height:23px;color:var(--accent)}
-  .card h3{font-size:18.5px;font-weight:600;margin-bottom:10px;letter-spacing:-.3px}
-  .card p{color:var(--muted);font-size:15px;line-height:1.6}
+/* ---------- content ---------- */
+.content{position:relative;z-index:10;height:100%;display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:clamp(84px,13svh,130px) 24px clamp(28px,6svh,64px)}
+.hero-eyebrow{font-size:.72rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:rgba(30,30,30,.75);margin-bottom:clamp(14px,2.4svh,24px);animation:blurIn 1s .1s both}
+.hero h1{font-weight:400;font-size:clamp(2.4rem,5.4vw,5.2rem);line-height:1.04;letter-spacing:-.04em}
+.hero h1 .acc{color:var(--red);font-weight:600}
+.hw{display:inline-block;opacity:0;animation:wordIn 1.1s var(--ease) forwards;animation-delay:calc(.2s + var(--i)*80ms)}
+@keyframes wordIn{from{opacity:0;filter:blur(14px);transform:translateY(.42em)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes blurIn{from{opacity:0;filter:blur(10px)}to{opacity:1;filter:blur(0)}}
 
-  /* problem cards accent */
-  .card.warn .ico{background:rgba(255,140,90,0.12);border-color:rgba(255,140,90,0.25)}
-  .card.warn .ico svg{color:#FF9D6B}
+.stats{margin-top:clamp(16px,2.6svh,26px);display:flex;list-style:none;border:1px solid var(--line);border-radius:999px;
+  background:transparent;padding:6px 6px;animation:blurIn 1.1s .65s both}
+.stats li{display:flex;align-items:center;gap:10px;padding:1px 20px;text-align:left}
+.stats li+li{border-left:1px solid var(--line)}
+.stats strong{font-weight:700;font-size:1.05rem;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;min-width:2.4ch}
+.stats span{font-size:.62rem;line-height:1.35;max-width:16em;color:rgba(30,30,30,.7)}
 
-  /* ---------- CAPABILITY (what you can do) ---------- */
-  .cap-card{background:var(--secondary);border:1px solid rgba(176,168,254,0.28);border-radius:var(--radius);padding:34px}
-  .cap-card .num{font-size:13px;font-weight:700;color:var(--secondary-light);letter-spacing:1px;margin-bottom:18px}
-  .cap-card .ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.14);margin-bottom:20px}
-  .cap-card .ico svg{width:24px;height:24px;color:#fff}
-  .cap-card h3{font-size:20px;font-weight:600;margin-bottom:10px;color:#fff}
-  .cap-card p{color:rgba(255,255,255,0.82);font-size:15px}
+.cta-block{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2.6svh,26px);animation:blurIn 1.1s .85s both}
+.ctas{display:flex;align-items:center;gap:clamp(20px,3vw,40px);flex-wrap:wrap;justify-content:center}
+.hero-btn{display:inline-block;padding:16px 30px;border-radius:999px;background:var(--red);color:#fff;font-weight:500;font-size:.96rem;
+  box-shadow:0 10px 28px rgba(229,74,89,.35);transition:transform .3s var(--ease),box-shadow .3s}
+.hero-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(229,74,89,.45)}
+.link{font-size:.72rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid currentColor;display:inline-flex;gap:10px}
+.ch{display:inline-block;overflow:hidden;height:1.25em;line-height:1.25em;vertical-align:top}
+.ch>span{display:block;transition:transform .5s var(--ease);transition-delay:calc(var(--i)*14ms)}
+.hero-btn:hover .ch>span,.link:hover .ch>span{transform:translateY(-100%)}
 
-  /* ---------- TABBED GALLERY ---------- */
-  .gallery{display:grid;grid-template-columns:300px 1fr;gap:32px;align-items:start}
-  @media(max-width:880px){.gallery{grid-template-columns:1fr}}
-  .tabs{display:flex;flex-direction:column;gap:8px}
-  @media(max-width:880px){.tabs{flex-direction:row;overflow-x:auto;padding-bottom:6px}}
-  .tab{display:flex;align-items:center;gap:13px;padding:16px 18px;border-radius:var(--radius-sm);border:1px solid transparent;cursor:pointer;transition:.25s;color:var(--muted);font-weight:500;font-size:15px;white-space:nowrap}
-  .tab svg{width:20px;height:20px;flex-shrink:0}
-  .tab:hover{background:var(--surface)}
-  .tab.active{background:var(--surface-2);border-color:var(--border-2);color:var(--text)}
-  .tab.active svg{color:var(--accent)}
-  .tab .lbl{display:flex;flex-direction:column;gap:1px}
-  .tab .lbl small{font-size:12px;color:var(--muted-2);font-weight:400;display:none}
-  @media(min-width:881px){.tab.active .lbl small{display:block}}
+/* floating cards: icon bubble + dotted connector to a node + red-bar text */
+.floats{position:absolute;inset:0;pointer-events:none;z-index:2}
+.float{position:absolute;width:max-content;
+  animation:blurIn 1.1s var(--d,1s) both,bob var(--t,7s) ease-in-out var(--bd,0s) infinite alternate}
+.f1{left:calc(15.7% - 30px);top:calc(44.8% - 30px);--d:1.1s}
+.f2{left:calc(82.7% - 30px);top:calc(47% - 30px);--d:1.3s;--t:8.5s;--bd:-2s}
+.f3{left:calc(7.5% - 30px);top:calc(70.9% - 30px);--d:1.5s;--t:7.5s;--bd:-4s}
+@keyframes bob{from{transform:translateY(-5px)}to{transform:translateY(6px)}}
+.hico{position:relative;isolation:isolate;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 40%,#fff 0%,rgba(255,255,255,.9) 70%,rgba(255,242,238,.88) 100%);
+  border:1.5px solid rgba(255,255,255,.95);
+  box-shadow:0 8px 22px rgba(229,74,89,.12),inset 0 1px 0 #fff}
+.hico::before{content:"";position:absolute;z-index:-1;inset:-14px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(240,128,130,.16) 0%,rgba(240,128,130,.07) 60%,rgba(240,128,130,0) 100%)}
+.ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.ring circle{fill:none;stroke:var(--red);stroke-width:1.1;stroke-dasharray:1.5 6;stroke-linecap:round;opacity:.45}
+.links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.links path{fill:none;stroke:var(--red);stroke-width:1.2;stroke-dasharray:1.5 5;stroke-linecap:round;opacity:.8}
+.links circle{fill:var(--red);filter:drop-shadow(0 0 4px rgba(229,74,89,.5))}
+.hico img{width:26px;height:26px;display:block}
+.hico i{font-style:normal;font-size:.8rem;font-weight:600;color:var(--red);letter-spacing:.04em}
+.txt{margin:14px 0 0 -13px;padding-left:14px;border-left:2px solid var(--red);text-align:left;max-width:13em;
+  text-shadow:0 0 14px rgba(247,235,223,.95)}
+.txt strong{display:block;font-size:1.05rem;font-weight:600;line-height:1.2;letter-spacing:-.015em}
+.txt em{display:block;margin-top:6px;font-style:normal;font-size:.8rem;line-height:1.45;color:rgba(30,30,30,.66)}
 
-  .panel{display:none}
-  .panel.active{display:block;animation:fade .4s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .screenshot{
-    border:1px solid var(--border-2);border-radius:var(--radius);overflow:hidden;background:var(--surface);
-  }
-  .ss-bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg-2)}
-  .ss-bar span{width:11px;height:11px;border-radius:50%;background:#2a3540}
-  .ss-bar .ss-title{margin-left:12px;font-size:12.5px;color:var(--muted-2);font-weight:500}
-  .ss-body{aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-    background:
-      linear-gradient(135deg,rgba(229,74,89,0.05),rgba(176,168,254,0.04)),
-      repeating-linear-gradient(45deg,rgba(255,255,255,0.012) 0 12px,transparent 12px 24px);
-    color:var(--muted-2);text-align:center;padding:30px}
-  .ss-body .ph-ico{width:54px;height:54px;border-radius:14px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
-  .ss-body .ph-ico svg{width:27px;height:27px;color:var(--accent)}
-  .ss-body .ph-label{font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-  .ss-body .ph-note{font-size:13px;color:var(--muted-2);max-width:340px}
-  .panel-desc{margin-top:22px}
-  .panel-desc h3{font-size:21px;font-weight:600;margin-bottom:8px}
-  .panel-desc p{color:var(--muted);font-size:15.5px;max-width:560px}
+/* tablet + mobile: natural flow, bank sits at the bottom, labels become a tidy row/stack */
+@media (max-width:1100px){
+  .hero{height:auto;min-height:100svh}
+  .content{height:auto;min-height:100svh;padding:76px 20px 32px}
+  .bank-layer{top:auto;bottom:0}
+  .veil{height:46%}
+  .floats{position:static;pointer-events:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(100%,920px);margin-top:22px}
+  .float{position:static;width:auto;display:flex;gap:12px;align-items:flex-start;animation:none}
+  .hico{flex:none;width:48px;height:48px}
+  .hico img{width:22px;height:22px}
+  .ring,.links{display:none}
+  .txt{margin:0;max-width:none}
+  .cta-block{margin-top:28px}
+}
+@media (max-width:860px){
+  .stats{flex-direction:column;border-radius:22px;padding:4px 0;width:100%;max-width:420px}
+  .stats li{padding:9px 20px}
+  .stats li+li{border-left:0;border-top:1px solid var(--line)}
+  .stats span{max-width:none}
+  .floats{grid-template-columns:1fr;max-width:420px}
+  .hero-eyebrow{font-size:.62rem;letter-spacing:.14em;line-height:1.6}
+  .hero h1{font-size:clamp(2rem,9vw,2.6rem);text-wrap:balance}
+  .hero-btn{padding:14px 24px;font-size:.92rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-eyebrow,.stats,.cta-block,.cloud img,.monogram,.float{animation:none}
+  .hw{animation:none;opacity:1}
+  .ch>span{transition:none}
+  .grid-lines i{animation:none}
+  .grid-lines b{animation:none;opacity:1}
+}
 
-  /* ---------- MICROSOFT STRIP ---------- */
-  .ms-band{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:42px}
-  .ms-logos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:10px}
-  @media(max-width:880px){.ms-logos{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:480px){.ms-logos{grid-template-columns:1fr}}
-  .ms-logo{display:flex;align-items:center;justify-content:center;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:20px 18px;min-height:92px;transition:.25s}
-  .ms-logo:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .ms-logo img{max-height:44px;max-width:86%;width:auto;height:auto;object-fit:contain;opacity:.92;transition:opacity .25s}
-  .ms-logo:hover img{opacity:1}
+/* ===================== BODY SECTIONS (from second.html) ===================== */
 
-  .why-matters{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-  .wm{display:flex;align-items:center;gap:10px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;font-size:14.5px;font-weight:500;flex:1 1 200px}
-  .wm svg{width:18px;height:18px;color:var(--accent);flex-shrink:0}
+:root{
+  --red:#e54a59; --white:#ffffff; --black:#1e1e1e; --lilac:#b0a8fe; --blue:#4e3aad; --beige:#e8dccc;
+  --ink:#1e1e1e; --ink-60:rgba(30,30,30,.62); --ink-40:rgba(30,30,30,.4); --ink-12:rgba(30,30,30,.12); --ink-06:rgba(30,30,30,.05);
+  --blue-08:rgba(78,58,173,.08); --lilac-25:rgba(176,168,254,.25); --beige-45:rgba(232,220,204,.45);
+  --r:24px; --max:1360px; --gut:clamp(20px,5vw,72px);
+  --gutter:clamp(16px,4vw,72px);
 
-  /* ---------- OUTCOMES ---------- */
-  .outcome{display:flex;gap:18px;padding:26px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);transition:.3s}
-  .outcome:hover{border-color:var(--border-2);background:var(--surface-2)}
-  .outcome .ico{width:44px;height:44px;flex-shrink:0;border-radius:11px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
-  .outcome .ico svg{width:22px;height:22px;color:var(--accent)}
-  .outcome h3{font-size:17px;font-weight:600;margin-bottom:5px}
-  .outcome p{color:var(--muted);font-size:14.5px}
+  /* ===== TYPE SCALE (BloomFi-style: medium weights, restrained sizes) — tune here ===== */
+  --fw-regular:400; --fw-medium:500;
+  --fs-h2:clamp(30px,3.6vw,48px);       /* section titles */
+  --fs-statement:clamp(30px,4.6vw,66px);  /* big scroll statement */
+  --fs-statement-sub:clamp(17px,1.75vw,24px);
+  --fs-h3:clamp(20px,1.9vw,26px);       /* card titles */
+  --fs-stat:clamp(40px,4.4vw,60px);     /* big numbers */
+  --fs-body:16px;
+  --fs-small:14px;
+  --fs-label:13px;
+  --ls-head:-.03em; --ls-body:-.005em;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',sans-serif;font-weight:var(--fw-regular);font-size:var(--fs-body);letter-spacing:var(--ls-body);background:var(--white);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+h1,h2,h3{letter-spacing:var(--ls-head);line-height:1.12;font-weight:var(--fw-medium)}
+h2{font-size:var(--fs-h2)}
+h3{font-size:var(--fs-h3)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-label);font-weight:var(--fw-medium);color:var(--blue);background:var(--blue-08);padding:6px 12px;border-radius:99px;letter-spacing:0}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--red);display:block}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:var(--fw-medium);font-size:15px;padding:13px 22px;border-radius:99px;transition:transform .25s,background .25s}
+.btn-light{background:#fff;color:var(--black)}
+.btn-light:hover{background:var(--lilac);transform:translateY(-2px)}
+.btn svg{width:15px;height:15px;transition:transform .25s}
+.btn:hover svg{transform:translateX(3px)}
 
-  /* ---------- WHY TEZO ---------- */
-  .why-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  @media(max-width:760px){.why-list{grid-template-columns:1fr}}
-  .why-item{display:flex;align-items:center;gap:16px;padding:22px 24px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);transition:.3s}
-  .why-item:hover{border-color:var(--accent);background:var(--surface-2)}
-  .why-item .ico{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
-  .why-item .ico svg{width:21px;height:21px;color:var(--accent)}
-  .why-item span{font-size:15.5px;font-weight:500}
+/* ===== Margin lines + section dividers (BloomFi-style frame) ===== */
+.frame{position:absolute;inset:0;display:flex;justify-content:center;pointer-events:none;z-index:30}
+.frame i{display:block;width:calc(100% - 2*var(--gutter));height:100%;border-left:1px solid var(--ink-12);border-right:1px solid var(--ink-12)}
+.sx{position:relative;border-top:1px solid var(--ink-12);overflow-x:clip}
+.sx.first{border-top:0}
+.sx::before,.sx::after{content:"";position:absolute;top:0;width:13px;height:13px;transform:translate(-50%,-50%);z-index:31;pointer-events:none;
+  background:linear-gradient(var(--ink-40),var(--ink-40)) center/100% 1px no-repeat,linear-gradient(var(--ink-40),var(--ink-40)) center/1px 100% no-repeat,var(--white)}
+.sx::before{left:calc(var(--gutter) + .5px)}
+.sx::after{left:calc(100% - var(--gutter) - .5px)}
+.sx.first::before,.sx.first::after{display:none}
+.sx.end{height:56px}
+.sx.end::before,.sx.end::after{top:0}
 
-  /* ---------- CTA BAND ---------- */
-  .cta-band{position:relative;border-radius:24px;padding:64px 48px;text-align:center;overflow:hidden;
-    background:linear-gradient(135deg,var(--secondary),#372a7d);
-    border:1px solid rgba(176,168,254,0.32)}
-  .cta-band h2{font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:-1px;max-width:620px;margin:0 auto}
-  .cta-band p{color:rgba(255,255,255,0.82);font-size:17px;max-width:560px;margin:18px auto 32px}
-  .cta-band .hero-cta{justify-content:center}
+/* ===== Placeholders (swap with your own assets) ===== */
+.ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;width:100%;height:100%;min-height:120px;padding:18px;border:1.5px dashed var(--blue);border-radius:18px;background:var(--beige-45);color:var(--blue)}
+.ph b{font-size:var(--fs-label);font-weight:var(--fw-medium);letter-spacing:.02em}
+.ph span{font-size:12px;line-height:1.45;opacity:.85;max-width:34ch}
+.ph.has-img,.ph.on-dark.has-img{border:0;background:none;padding:0;min-height:0}
+.ph img{width:100%;height:100%;object-fit:contain;display:block}
+.ph .fn{font-size:11px;font-weight:var(--fw-medium);opacity:1;background:rgba(78,58,173,.1);padding:3px 8px;border-radius:6px;margin-top:2px}
+.ph.on-dark .fn{background:rgba(255,255,255,.12)}
+.ph.on-dark{background:rgba(255,255,255,.08);border-color:var(--lilac);color:var(--lilac)}
 
-  /* ---------- CONTACT FORM ---------- */
-  .form-wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-  @media(max-width:860px){.form-wrap{grid-template-columns:1fr;gap:36px}}
-  .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:38px}
-  .field{margin-bottom:18px}
-  .field label{display:block;font-size:13.5px;font-weight:500;margin-bottom:8px;color:var(--muted)}
-  .field label .req{color:var(--accent)}
-  .field input,.field select,.field textarea{
-    width:100%;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
-    padding:13px 15px;color:var(--text);font-size:15px;font-family:var(--font);transition:.2s}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
-  .field textarea{resize:vertical;min-height:96px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:480px){.row{grid-template-columns:1fr}}
-  .form-success{display:none;text-align:center;padding:30px 0}
-  .form-success svg{width:54px;height:54px;color:var(--accent);margin-bottom:14px}
-  .form-success h3{font-size:22px;margin-bottom:8px}
-  .form-success p{color:var(--muted)}
+/* ===== Scroll statement ===== */
+.statement{position:relative;height:300vh}
+.stage{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
+.stage .copy{max-width:1240px;padding:0 var(--gut);text-align:center;display:flex;flex-direction:column;align-items:center}
+.reveal-text{font-size:var(--fs-statement);font-weight:var(--fw-medium);letter-spacing:var(--ls-head);line-height:1.22}
+.reveal-text .w{color:rgba(30,30,30,.16)}
+.reveal-text .kw{display:inline-block;white-space:nowrap;color:rgba(30,30,30,.16)}
+/* keyword chip: icon tile always visible; black bar wipes in behind it and the word turns white */
+.kwc{position:relative;display:inline-flex;align-items:center;height:1.06em;vertical-align:-.2em;border-radius:.1em;overflow:hidden;isolation:isolate}
+.kwc::before{content:"";position:absolute;inset:0;background:#000;transform:scaleX(0);transform-origin:left center;transition:transform .55s cubic-bezier(.2,.7,.2,1);z-index:-1}
+.kw.on .kwc::before{transform:scaleX(1)}
+.ico{flex:none;display:block;width:1.06em;height:1.06em;position:relative;overflow:hidden}
+.ico svg,.ico img{width:100%;height:100%;display:block;object-fit:contain}
+.ico.t1{background:radial-gradient(circle at 50% 50%,#9a85f6 0%,#a995f8 55%,#c4b8fb 100%)}
+.ico.t2{background:radial-gradient(circle at 50% 50%,#e86cf6 0%,#ec85f7 55%,#f5b9fb 100%)}
+.ico.t3{background:radial-gradient(circle at 50% 50%,#f9d08c 0%,#f8d9a4 55%,#fbe8c6 100%)}
+.ico.has-img{background:none}
+.lbl{display:block;line-height:1;padding:0 .42em 0 .45em;color:rgba(30,30,30,.16);transition:color .45s ease .08s}
+.kw.on .lbl{color:#fff}
+.kw .pn{color:inherit}
+.reveal-sub{margin-top:clamp(18px,2.4vw,28px);font-size:var(--fs-statement-sub);font-weight:var(--fw-regular);line-height:1.45;max-width:46ch}
+.reveal-sub .w{color:rgba(30,30,30,.16)}
+.progress{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);width:100px;height:2px;background:var(--ink-06);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--blue)}
 
-  .contact-points{display:flex;flex-direction:column;gap:22px;margin-top:34px}
-  .cp{display:flex;gap:15px;align-items:flex-start}
-  .cp .ico{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center}
-  .cp .ico svg{width:20px;height:20px;color:var(--accent)}
-  .cp h4{font-size:16px;font-weight:600;margin-bottom:3px}
-  .cp p{color:var(--muted);font-size:14.5px}
+/* ===== Section heads ===== */
+#capabilities .sec-head{max-width:none}
+.one-line{white-space:nowrap;font-size:clamp(15px,2.55vw,36px)}
+.hl{background:var(--lilac-25);color:var(--blue);padding:.02em .22em;border-radius:.22em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+@media(max-width:720px){.one-line{white-space:normal;font-size:var(--fs-h2)}}
+section.s{padding:clamp(64px,8vw,112px) 0}
+.sec-head{display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin-bottom:clamp(32px,4vw,52px);max-width:760px}
+.fade{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.fade.in{opacity:1;transform:none}
 
-  /* ---------- FOOTER ---------- */
-  footer{border-top:1px solid var(--border);padding:54px 0 40px;background:var(--bg-2)}
-  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;margin-bottom:40px}
-  .foot-top p{color:var(--muted);font-size:15px;max-width:320px;margin-top:14px}
-  .foot-cols{display:flex;gap:64px;flex-wrap:wrap}
-  .foot-col h5{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted-2);margin-bottom:16px}
-  .foot-col a{display:block;color:var(--muted);font-size:14.5px;margin-bottom:11px;transition:.2s}
-  .foot-col a:hover{color:var(--accent)}
-  .foot-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted-2);font-size:13.5px}
+/* ===== Personas ===== */
+.tabs,.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.tab{padding:10px 18px;border-radius:99px;font-size:var(--fs-small);font-weight:var(--fw-medium);border:1px solid var(--ink-12);color:var(--ink-60);transition:all .25s}
+.tab:hover{border-color:var(--blue);color:var(--blue)}
+.tab.active{background:var(--black);color:#fff;border-color:var(--black)}
+.persona{display:none;grid-template-columns:1fr 1fr;gap:20px}
+.persona.active{display:grid;animation:rise .6s cubic-bezier(.2,.7,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card{border-radius:var(--r);padding:clamp(24px,3vw,40px);position:relative;overflow:hidden}
+.card.beige{background:var(--beige-45)}
+.card.lilac{background:var(--lilac-25)}
+.card.blue{background:var(--blue);color:#fff}
+.card .sub{margin-top:16px;font-weight:var(--fw-medium);font-size:var(--fs-body)}
+.card ul{margin-top:20px;list-style:none;display:grid;gap:12px}
+.card li{display:flex;gap:12px;font-size:var(--fs-body);color:inherit;opacity:.78}
+.card li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:10px}
+.persona .art{display:block;min-height:300px;padding:20px}
+@media(max-width:860px){.persona.active{grid-template-columns:1fr}.persona .art{min-height:220px;order:-1}}
 
-  /* reveal animation */
-  .reveal{opacity:0;transform:translateY(26px);transition:.7s cubic-bezier(.2,.7,.3,1)}
-  .reveal.in{opacity:1;transform:none}
+/* ===== Capabilities ===== */
+.cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.cap{border-radius:var(--r);padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:500px}
+.cap .label{font-size:12px;font-weight:var(--fw-medium);letter-spacing:.12em;opacity:.7}
+.cap h3{margin:14px 0 22px;max-width:16ch;font-size:clamp(22px,2.3vw,30px)}
+.cap .deco{position:absolute;right:-60px;top:-60px;width:320px;height:320px;pointer-events:none}
+.cap dl{margin-top:auto;position:relative;z-index:2}
+.cap dl div{padding:14px 0;border-top:1px solid rgba(255,255,255,.2)}
+.cap.light dl div{border-top-color:var(--ink-12)}
+.cap dt{font-weight:var(--fw-medium);font-size:var(--fs-body)}
+.cap dd{font-size:var(--fs-small);opacity:.75;margin-top:2px}
+.cap-ai{min-height:0;grid-column:1/-1;background:var(--beige-45);display:grid;grid-template-columns:150px 1fr;gap:clamp(20px,4vw,48px);align-items:center}
+.cap-ai h3{margin:0 0 10px;max-width:none}
+.cap-ai p{color:var(--ink-60);max-width:70ch}
+.cap-ai .ph{height:130px;margin:0;min-height:0}
+@media(max-width:860px){.cap-grid{grid-template-columns:1fr}.cap-ai{grid-template-columns:1fr}.cap-ai .ph{height:110px}}
+
+/* ===== Case studies ===== */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.case{grid-column:span 3;border-radius:var(--r);padding:clamp(24px,2.8vw,36px);display:flex;flex-direction:column;gap:14px;transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.case:hover{transform:translateY(-5px);box-shadow:0 22px 44px -26px rgba(78,58,173,.35)}
+.case.big{grid-column:span 6;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,56px)}
+.case.hide{display:none}
+.case .meta,.ong .meta{font-size:var(--fs-label);font-weight:var(--fw-medium);opacity:.65}
+.case p{font-size:var(--fs-small);opacity:.82}
+b.k{font-weight:var(--fw-medium)}
+.num{font-size:var(--fs-stat);font-weight:var(--fw-medium);letter-spacing:-.04em;line-height:1}
+.num small{display:block;font-size:var(--fs-small);font-weight:var(--fw-regular);letter-spacing:0;opacity:.75;margin-top:10px;max-width:26ch;line-height:1.4}
+.mini-stats{display:grid;grid-template-columns:repeat(2,auto);gap:18px 28px;margin-top:6px}
+.mini-stats .num{font-size:clamp(32px,3.2vw,44px)}
+.case details,.ong details{margin-top:auto;border-top:1px solid rgba(128,128,128,.28);padding-top:14px}
+.case summary,.ong summary{list-style:none;cursor:pointer;font-size:var(--fs-small);font-weight:var(--fw-medium);display:flex;justify-content:space-between;align-items:center}
+.case summary::-webkit-details-marker,.ong summary::-webkit-details-marker{display:none}
+.case summary::after,.ong summary::after{content:"+";font-size:20px;font-weight:var(--fw-regular);transition:transform .3s}
+.case details[open] summary::after,.ong details[open] summary::after{transform:rotate(45deg)}
+.detail{display:grid;gap:12px;padding-top:14px}
+.detail h4{font-size:var(--fs-small);font-weight:var(--fw-medium)}
+.note{font-size:12.5px!important;opacity:.6!important}
+@media(max-width:860px){.case,.case.big{grid-column:span 6;display:flex}}
+
+.sub-block{margin-top:clamp(48px,6vw,88px)}
+.sub-block h2{margin-bottom:24px}
+.ongoing{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.ong{border:1px solid var(--ink-12);border-radius:var(--r);padding:clamp(22px,2.6vw,32px);display:flex;flex-direction:column;gap:12px;transition:border-color .3s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.ong:hover{border-color:var(--blue);transform:translateY(-4px)}
+.ong.hide{display:none}
+.ong p{font-size:var(--fs-small);color:var(--ink-60)}
+.ong .focus{font-size:var(--fs-label);font-weight:var(--fw-medium);color:var(--blue);background:var(--blue-08);padding:10px 14px;border-radius:14px}
+.ong details p{padding-top:12px}
+.ong.gov{grid-column:1/-1;background:var(--black);color:#fff;border-color:var(--black)}
+.ong.gov p{color:rgba(255,255,255,.72)}
+.ong.gov details{border-top-color:rgba(255,255,255,.2)}
+@media(max-width:860px){.ongoing{grid-template-columns:1fr}}
+
+/* ===== Why Tezo ===== */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.why .card{min-height:380px;display:flex;flex-direction:column}
+.why .idx{font-size:var(--fs-label);font-weight:var(--fw-medium);opacity:.6}
+.why .ph,.why .ph.has-img{width:88px;height:88px;min-height:0;margin:28px 0 30px;padding:0;border-radius:24px;overflow:hidden;flex:none;align-self:flex-start}
+.why .ph img{width:100%;height:100%;object-fit:cover;display:block}
+/* icons 02/03 ship with a black matte around the rounded tile: crop it away and re-round the corners */
+.why .card:not(.blue) .ph img{transform:scale(1.2)}
+.why h3{margin-top:0}
+.why p{margin-top:12px;font-size:var(--fs-small);opacity:.8}
+@media(max-width:860px){.why{grid-template-columns:1fr}.why .card{min-height:0}}
+
+/* ===== Approach ===== */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink-12)}
+.step{padding:30px clamp(0px,2.4vw,32px) 36px 0;border-right:1px solid var(--ink-12);padding-left:clamp(0px,2.4vw,32px)}
+.step:first-child{padding-left:0}
+.step:last-child{border-right:0}
+.step .n{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-weight:var(--fw-medium);font-size:var(--fs-label)}
+.step h3{margin:20px 0 10px}
+.step p{color:var(--ink-60);font-size:var(--fs-body)}
+.outputs{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.outputs b{font-size:var(--fs-small);font-weight:var(--fw-medium);margin-right:10px}
+.chip{font-size:var(--fs-label);font-weight:var(--fw-medium);padding:8px 14px;border-radius:99px;background:var(--beige-45)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}.step{border-right:0;border-bottom:1px solid var(--ink-12);padding-left:0}.step:last-child{border-bottom:0}}
+
+/* ===== CTA ===== */
+.cta-band{position:relative;background:var(--black);color:#fff;border-radius:32px;overflow:hidden;padding:clamp(36px,5vw,72px)}
+.cta-band .art .ph,.cta-band .art .ph.has-img{border-radius:0}
+.cta-band .art{position:absolute;right:clamp(20px,3vw,40px);top:clamp(20px,3vw,40px);bottom:clamp(20px,3vw,40px);width:36%}
+.cta-inner{position:relative;z-index:2;max-width:560px}
+.cta-inner h2{margin:16px 0 14px}
+.cta-inner p.d{color:rgba(255,255,255,.7);max-width:52ch}
+.cta-band .eyebrow{background:rgba(255,255,255,.1);color:#fff}
+.agenda{margin-top:30px;display:grid;gap:10px}
+.agenda label{font-size:var(--fs-label);font-weight:var(--fw-medium);color:rgba(255,255,255,.7)}
+.agenda select{font-family:inherit;font-size:15px;font-weight:var(--fw-medium);width:100%;max-width:420px;padding:14px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' fill='none'%3E%3Cpath d='M1 1l6 6 6-6' stroke='white' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center}
+.agenda select option{color:var(--black)}
+.agenda .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
+.agenda .done{font-size:var(--fs-label);color:var(--lilac);min-height:20px}
+.fine{font-size:var(--fs-label);color:rgba(255,255,255,.55);max-width:52ch;margin-top:6px}
+@media(max-width:900px){.cta-band .art{display:none}}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .fade{opacity:1;transform:none;transition:none}
+}
+
 </style>
 </head>
 <body>
 
-<div class="glow glow-1"></div>
-<div class="glow glow-2"></div>
+<section class="hero" id="hero">
+  <div class="layer video" data-depth="0"><video autoplay muted loop playsinline preload="auto"><source src="images/background.webm" type="video/webm"></video></div>
+  <div class="layer cloud cloud2" data-depth="26"><img src="images/clouds-2.png" alt="" onerror="this.parentNode.classList.add('fallback');this.remove()"></div>
+  <div class="layer cloud cloud1" data-depth="16"><img src="images/clouds-1.png" alt="" onerror="this.parentNode.classList.add('fallback');this.remove()"></div>
+  <div class="grid-lines" aria-hidden="true">
+    <i class="v v1"></i><i class="v v2"></i><i class="h h1"></i><i class="h h2"></i>
+    <b class="p1"></b><b class="p2"></b><b class="p3"></b><b class="p4"></b>
+  </div>
+  <svg class="ring" aria-hidden="true"><circle cx="0" cy="0" r="0"/></svg>
+  <div class="glow" aria-hidden="true"></div>
 
-<!-- HERO -->
-<header class="hero">
-  <div class="wrap">
-    <div class="chip reveal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-      Built on Microsoft Cloud
-    </div>
-    <h1 class="reveal">Automate manufacturing workflows. <span class="grad">Improve visibility.</span> Move faster.</h1>
-    <p class="lead reveal">Tezo helps manufacturers digitize manual processes, automate operational workflows, and improve decision-making across production, quality, maintenance, and operations.</p>
-    <p class="built reveal">Designed for manufacturing teams.</p>
-    <div class="hero-cta reveal">
-      <a href="#contact" class="btn btn-primary">Request a Demo
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="https://www.tezo.com/contact-us" class="btn btn-ghost">Talk to an Expert</a>
+  <div class="layer bank-layer" aria-hidden="true">
+    <div class="bank" id="bank">
+      <div class="tint"></div>
+      <img class="monogram" src="images/monogram.png" alt="">
+      <img class="main" src="images/bank-unlit.png" alt="">
+      <img class="rim" src="images/bank-lit.png" alt="">
     </div>
   </div>
-</header>
+  <div class="veil" aria-hidden="true"></div>
 
-<!-- PROBLEM -->
-<section id="problem">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">The Manufacturing Reality</div>
-      <h2 class="title">Built for manufacturers dealing with operational complexity</h2>
-      <p class="section-sub">Manufacturing teams still rely on spreadsheets, emails, disconnected systems, and manual follow-ups to run critical processes — which slows decisions, hides bottlenecks, and increases operational risk.</p>
-    </div>
-    <div class="grid g-3">
-      <div class="card warn reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v5h-5"/></svg></div>
-        <h3>Manual workflows</h3>
-        <p>Approvals, handoffs, and follow-ups that depend on people chasing people.</p>
-      </div>
-      <div class="card warn reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22M6.6 6.6A18.5 18.5 0 0 0 2 12s3 8 10 8a9.1 9.1 0 0 0 5.4-1.6"/></svg></div>
-        <h3>Limited visibility</h3>
-        <p>No single view of process status, ownership, delays, or exceptions.</p>
-      </div>
-      <div class="card warn reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14M5 2h14M17 22v-4.17a2 2 0 0 0-.59-1.41L12 12l-4.41 4.42A2 2 0 0 0 7 17.83V22M7 2v4.17a2 2 0 0 0 .59 1.41L12 12l4.41-4.42A2 2 0 0 0 17 6.17V2"/></svg></div>
-        <h3>Slow response to issues</h3>
-        <p>Operational risks are identified too late, after they have already impacted performance.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- SOLUTION -->
-<section id="solution" style="background:var(--bg-2);border-block:1px solid var(--border)">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">One Intelligent Layer</div>
-      <h2 class="title">Manufacturing process automation, unified</h2>
-      <p class="section-sub">Tezo's Manufacturing Process Automation solution connects your systems, workflows, and teams into one Microsoft-powered operating layer.</p>
+  <div class="content">
+    <p class="hero-eyebrow">Modernization for banks, insurers &amp; credit unions</p>
+    <h1 aria-label="Modernize banking and insurance workflows.">Modernize banking<br>and insurance <span class="acc">workflows.</span></h1>
+
+    <ul class="stats">
+      <li><strong data-count="30" data-suffix="+">30+</strong><span>automated flows in a credit-union modernization engagement</span></li>
+      <li><strong data-count="75" data-suffix="%">75%</strong><span>less time per compliance test run for a bank</span></li>
+      <li><strong data-count="30" data-suffix="+">30+</strong><span>banking systems integrated into a shared data foundation</span></li>
+    </ul>
+
+    <div class="floats">
+      <svg class="links" aria-hidden="true"><g><path/><circle r="3.5"/><circle r="5"/></g><g><path/><circle r="3.5"/><circle r="5"/></g><g><path/><circle r="3.5"/><circle r="5"/></g></svg>
+      <div class="float f1">
+        <div class="hico"><img src="images/icon-customers.svg" alt="" onerror="this.outerHTML='<i>01</i>'"></div>
+        <div class="txt"><strong>Customers and employees</strong><em>Accounts, Cards, Policies, Approvals</em></div>
+      </div>
+      <div class="float f2">
+        <div class="hico"><img src="images/icon-engineering.svg" alt="" onerror="this.outerHTML='<i>02</i>'"></div>
+        <div class="txt"><strong>Product Engineering</strong><em>Applications, APIs, Releases, Support</em></div>
+      </div>
+      <div class="float f3">
+        <div class="hico"><img src="images/icon-data.svg" alt="" onerror="this.outerHTML='<i>03</i>'"></div>
+        <div class="txt"><strong>Trusted data and useful AI</strong><em>Quality, Analytics, Assistance, Governance</em></div>
+      </div>
     </div>
-    <div class="grid g-3">
-      <div class="cap-card reveal">
-        <div class="num">01</div>
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-        <h3>Automate workflows</h3>
-        <p>Digitize approvals, routing, task assignment, and escalations.</p>
-      </div>
-      <div class="cap-card reveal">
-        <div class="num">02</div>
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-        <h3>Track operations in real time</h3>
-        <p>Monitor process status, SLA risks, exceptions, and bottlenecks.</p>
-      </div>
-      <div class="cap-card reveal">
-        <div class="num">03</div>
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9l4.4-1.4L12 3zM19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z"/></svg></div>
-        <h3>Act faster with AI</h3>
-        <p>Use AI-assisted prioritization, summaries, alerts, and recommendations.</p>
+
+    <div class="cta-block">
+      <div class="ctas">
+        <a class="hero-btn" href="#start"><span data-roll>Discuss your modernization priority</span></a>
+        <a class="link" href="#evidence"><span data-roll>Explore the work</span><span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- USE CASES -->
-<section id="usecases">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">Use Cases</div>
-      <h2 class="title">Where it goes to work</h2>
-      <p class="section-sub">From the production line to back-office operations, automate the processes that run your plant.</p>
+
+
+
+<main id="top" style="position:relative">
+<div class="frame" aria-hidden="true"><i></i></div>
+
+<!-- ================= SCROLL STATEMENT ================= -->
+<section class="sx first statement" id="statement">
+  <div class="stage">
+    <div class="copy">
+      <p class="reveal-text" id="revealMain">Connect existing <span class="kw" data-img="statement-platforms" data-after=",">platforms</span> improve <span class="kw" data-img="statement-applications">applications</span> and <span class="kw" data-img="statement-automate">automate</span> manual work. Build reliable releases and trusted data around the workflows that matter.</p>
+      <p class="reveal-sub" id="revealSub">Tezo brings Product Engineering at the core, with Data Engineering and AI to accelerate transformation.</p>
     </div>
-    <div class="grid g-4">
-      <div class="card reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M4 20V8l5 4V8l5 4V8l5 4v8M9 20v-4M15 20v-4"/></svg></div>
-        <h3>Production workflows</h3>
-        <p>Automate production approvals, status updates, issue routing, and task handoffs.</p>
+    <div class="progress"><i id="prog"></i></div>
+  </div>
+</section>
+
+<!-- ================= PERSONAS ================= -->
+<section class="sx s" id="personas">
+  <div class="wrap">
+    <div class="sec-head fade">
+      <span class="eyebrow"><i></i>Who we work with</span>
+      <h2>What your team can expect.</h2>
+    </div>
+    <div class="tabs fade" role="tablist">
+      <button class="tab active" data-p="0">CIO / CTO</button>
+      <button class="tab" data-p="1">COO / Operations</button>
+      <button class="tab" data-p="2">Data / Analytics</button>
+      <button class="tab" data-p="3">Risk / Security</button>
+    </div>
+
+    <div class="persona active fade" data-p="0">
+      <div class="card beige">
+        <h3>A sequenced path through application and integration changes.</h3>
+        <p class="sub">Agree the system boundaries and the first delivery commitment.</p>
+        <ul>
+          <li>Map the applications, interfaces and dependencies that affect the chosen workflow.</li>
+          <li>Define API ownership, release controls and operating responsibilities.</li>
+          <li>Set acceptance measures, rollout and rollback plans for the first release.</li>
+        </ul>
       </div>
-      <div class="card reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg></div>
-        <h3>Quality processes</h3>
-        <p>Digitize inspections, non-conformance workflows, corrective actions, and approvals.</p>
+      <div class="card lilac art"><div class="ph" data-img="persona-cio"><b>PLACEHOLDER · CIO / CTO art</b><span>800×800 SVG or transparent PNG. Idea: connected system blocks (apps, APIs, releases) joined by a dotted path. Tezo palette only.</span></div></div>
+    </div>
+
+    <div class="persona fade" data-p="1">
+      <div class="card beige">
+        <h3>Make account, card and service workflows easier to run.</h3>
+        <p class="sub">Start with the hand-offs and recurring work that slow your team down.</p>
+        <ul>
+          <li>Map account and card processes, merger-related hand-offs and recurring service issues to a specific workflow.</li>
+          <li>Baseline processing or resolution time and agree how improvement will be measured.</li>
+          <li>Build transition, service coverage and human escalation into the delivery plan.</li>
+        </ul>
       </div>
-      <div class="card reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2.4-.6-.6-2.4 2.7-2.7z"/></svg></div>
-        <h3>Maintenance requests</h3>
-        <p>Streamline request intake, assignment, escalation, SLA tracking, and closure.</p>
+      <div class="card lilac art"><div class="ph" data-img="persona-coo"><b>PLACEHOLDER · COO / Operations art</b><span>800×800 SVG or transparent PNG. Idea: a bank card or account tile with a workflow arrow. Tezo palette only.</span></div></div>
+    </div>
+
+    <div class="persona fade" data-p="2">
+      <div class="card beige">
+        <h3>Build data that reporting and customer insight can rely on.</h3>
+        <p class="sub">Define the information required for one reporting or customer-data use case.</p>
+        <ul>
+          <li>Source-to-target mappings and definitions for the decisions your data needs to support.</li>
+          <li>Data quality, reconciliation, lineage and access controls designed into pipelines.</li>
+          <li>A lakehouse or warehouse plan with a first usable data product and handover.</li>
+        </ul>
       </div>
-      <div class="card reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.59 16.73A2 2 0 0 1 2 15.31V8.69a2 2 0 0 1 .59-1.42l4.68-4.68A2 2 0 0 1 8.69 2h6.62a2 2 0 0 1 1.42.59l4.68 4.68A2 2 0 0 1 22 8.69v6.62a2 2 0 0 1-.59 1.42l-4.68 4.68a2 2 0 0 1-1.42.59H8.69a2 2 0 0 1-1.42-.59z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
-        <h3>Operations exceptions</h3>
-        <p>Track delays, ownership, risk, and next actions across teams and systems.</p>
+      <div class="card lilac art"><div class="ph" data-img="persona-data"><b>PLACEHOLDER · Data / Analytics art</b><span>800×800 SVG or transparent PNG. Idea: stacked data layers (Bronze / Silver / Gold) or a lakehouse stack. Tezo palette only.</span></div></div>
+    </div>
+
+    <div class="persona fade" data-p="3">
+      <div class="card beige">
+        <h3>Build controls into releases, data pipelines and AI use cases.</h3>
+        <p class="sub">Agree who approves changes and what evidence they need.</p>
+        <ul>
+          <li>Release approvals, access boundaries, test evidence and a documented control design.</li>
+          <li>Data classification, sensitive-data handling and traceability for agreed sources.</li>
+          <li>AI evaluation, human review, monitoring and sign-off criteria for the chosen use case.</li>
+        </ul>
       </div>
+      <div class="card lilac art"><div class="ph" data-img="persona-risk"><b>PLACEHOLDER · Risk / Security art</b><span>800×800 SVG or transparent PNG. Idea: a shield with a check, or a lock over layered controls. Tezo palette only.</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery" style="background:var(--bg-2);border-block:1px solid var(--border)">
+<!-- ================= CAPABILITIES ================= -->
+<section class="sx s" id="capabilities">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">See It In Action</div>
-      <h2 class="title">One workspace for every operational view</h2>
-      <p class="section-sub">From live dashboards to Teams-native alerts — explore how the solution surfaces what matters.</p>
+    <div class="sec-head fade">
+      <span class="eyebrow"><i></i>Capabilities</span>
+      <h2 class="one-line"><mark class="hl">Product Engineering</mark> at the core. <mark class="hl">Data Engineering</mark> alongside it.</h2>
     </div>
-    <div class="gallery reveal">
-      <div class="tabs" id="tabs">
-        <div class="tab active" data-i="0">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h8v8H3zM13 3h8v5h-8zM13 12h8v9h-8zM3 15h8v6H3z"/></svg>
-          <span class="lbl">Dashboard view<small>Live operational overview</small></span>
+    <div class="cap-grid">
+      <article class="cap fade" style="background:var(--blue);color:#fff">
+        <svg class="deco" viewBox="-100 -100 200 200" fill="none"><g stroke="#b0a8fe" stroke-width="2" opacity=".55"><circle r="30"/><circle r="55"/><circle r="80"/><circle r="105"/></g></svg>
+        <span class="label">PRODUCT ENGINEERING</span>
+        <h3>Build, connect, modernize and run.</h3>
+        <dl>
+          <div><dt>Integration</dt><dd>Connect channels, applications and systems of record through governed APIs.</dd></div>
+          <div><dt>Modernization</dt><dd>Improve legacy applications, user workflows and internal digital workplaces.</dd></div>
+          <div><dt>DevSecOps</dt><dd>Bring testing, security checks and evidence into repeatable releases.</dd></div>
+          <div><dt>BAU support</dt><dd>Define service coverage, incident ownership, maintenance and handover.</dd></div>
+        </dl>
+      </article>
+      <article class="cap light fade" style="background:var(--lilac-25)">
+        <svg class="deco" viewBox="-100 -100 200 200" fill="none"><g fill="#4e3aad" opacity=".16"><circle cx="-50" cy="-50" r="34"/><circle cx="20" cy="-60" r="22"/><circle cx="60" cy="0" r="36"/><circle cx="-20" cy="20" r="26"/></g></svg>
+        <span class="label">DATA ENGINEERING</span>
+        <h3>Make information usable and trusted.</h3>
+        <dl>
+          <div><dt>Lakehouse / lake</dt><dd>Build ingestion and curated data layers around agreed business uses.</dd></div>
+          <div><dt>Warehouse</dt><dd>Develop models, marts and semantic layers for consistent reporting.</dd></div>
+          <div><dt>Data controls</dt><dd>Establish quality, reconciliation, lineage, ownership and access rules.</dd></div>
+          <div><dt>Data operations</dt><dd>Set up deployment, monitoring and runbooks your team can operate.</dd></div>
+        </dl>
+      </article>
+      <article class="cap cap-ai fade">
+        <div class="ph" data-img="ai-icon" data-ext="gif"><b>PLACEHOLDER · AI icon</b><span>256×256 GIF</span></div>
+        <div>
+          <h3>Where AI contributes</h3>
+          <p>Customer and agent assistance, knowledge retrieval and workflow automation, connected to the applications and data they need. Evaluation, access controls and human escalation are part of the design.</p>
         </div>
-        <div class="tab" data-i="1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><path d="M7 11v3a2 2 0 0 0 2 2h4"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
-          <span class="lbl">Workflow view<small>Every stage &amp; owner</small></span>
-        </div>
-        <div class="tab" data-i="2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-          <span class="lbl">Exception view<small>Risks &amp; next actions</small></span>
-        </div>
-        <div class="tab" data-i="3">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-          <span class="lbl">Teams alerts<small>Approvals in Microsoft Teams</small></span>
-        </div>
-        <div class="tab" data-i="4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
-          <span class="lbl">Analytics view<small>Trends &amp; performance</small></span>
-        </div>
-      </div>
+      </article>
+    </div>
+  </div>
+</section>
 
-      <div class="panels" id="panels">
-        <!-- 0 -->
-        <div class="panel active">
-          <div class="screenshot">
-            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Operations Dashboard</div></div>
-            <div class="ss-body">
-              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h8v8H3zM13 3h8v5h-8zM13 12h8v9h-8zM3 15h8v6H3z"/></svg></div>
-              <div class="ph-label">Screenshot placeholder</div>
-              <div class="ph-note">Drop the Dashboard screenshot here (16:9).</div>
+<!-- ================= CASE STUDIES ================= -->
+<section class="sx s" id="evidence">
+  <div class="wrap">
+    <div class="sec-head fade">
+      <span class="eyebrow"><i></i>The proof</span>
+      <h2>Case studies.</h2>
+    </div>
+    <div class="filters fade" data-for="cases">
+      <button class="tab active" data-f="all">All stories</button>
+      <button class="tab" data-f="pe">Product Engineering</button>
+      <button class="tab" data-f="de">Data Engineering</button>
+    </div>
+
+    <div class="bento" id="cases">
+      <article class="case big fade" data-t="pe" style="background:var(--black);color:#fff">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span class="meta">US credit union · Integration, automation and workplace modernization</span>
+          <h3>Merger workflows, connected and automated.</h3>
+          <p><b class="k">Challenge.</b> Fragmented member, loan and card data complicated merger migration. Account and workplace tasks depended on manual processing.</p>
+          <p><b class="k">Engineering response.</b> Tezo validated migration data, connected banking applications and automated account, card and internal workplace workflows.</p>
+          <p><b class="k">What changed.</b> Member and account information moved into existing banking systems, supported by automated operational workflows.</p>
+          <details>
+            <summary>View engineering detail</summary>
+            <div class="detail">
+              <div><h4>Core-system integration</h4><p>Validated member, share, loan and card data. KeyBridge APIs and Windows services supported exchange with KeyStone and related applications.</p></div>
+              <div><h4>Process automation</h4><p>Automated closures, card reissuance and decommissioning, address updates, fraud-alert activation and bad-address reversals.</p></div>
+              <div><h4>Digital workplace</h4><p>Converted InfoPath forms to Power Apps and improved intranet and board-portal workflows through SharePoint.</p></div>
             </div>
-          </div>
-          <div class="panel-desc"><h3>Dashboard view</h3><p>Real-time visibility into active workflows, exceptions, SLA risks, and operational performance.</p></div>
+          </details>
         </div>
-        <!-- 1 -->
-        <div class="panel">
-          <div class="screenshot">
-            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Workflow Tracker</div></div>
-            <div class="ss-body">
-              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><path d="M7 11v3a2 2 0 0 0 2 2h4"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></div>
-              <div class="ph-label">Screenshot placeholder</div>
-              <div class="ph-note">Drop the Workflow screenshot here (16:9).</div>
-            </div>
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:22px">
+          <span class="meta">Implementation scale</span>
+          <div class="num" style="color:var(--lilac)">30+<small>automated flows implemented</small></div>
+          <div class="mini-stats">
+            <div class="num">5K+<small>accounts imported for merger-related migration</small></div>
+            <div class="num">40K+<small>fraud-alert activations processed</small></div>
           </div>
-          <div class="panel-desc"><h3>Workflow view</h3><p>Track every process stage, owner, approval, dependency, and status update.</p></div>
+          <p class="note">Counts describe implementation scale. Alert activations are workflow activity, not a measure of fraud detected or prevented.</p>
         </div>
-        <!-- 2 -->
-        <div class="panel">
-          <div class="screenshot">
-            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Exception Center</div></div>
-            <div class="ss-body">
-              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
-              <div class="ph-label">Screenshot placeholder</div>
-              <div class="ph-note">Drop the Exception screenshot here (16:9).</div>
-            </div>
-          </div>
-          <div class="panel-desc"><h3>Exception view</h3><p>Identify delayed tasks, high-risk items, and recommended next actions.</p></div>
-        </div>
-        <!-- 3 -->
-        <div class="panel">
-          <div class="screenshot">
-            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Microsoft Teams · Tezo Alerts</div></div>
-            <div class="ss-body">
-              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
-              <div class="ph-label">Screenshot placeholder</div>
-              <div class="ph-note">Drop the Teams alerts screenshot here (16:9).</div>
-            </div>
-          </div>
-          <div class="panel-desc"><h3>Teams alerts</h3><p>Bring approvals, notifications, and escalations directly into Microsoft Teams.</p></div>
-        </div>
-        <!-- 4 -->
-        <div class="panel">
-          <div class="screenshot">
-            <div class="ss-bar"><span></span><span></span><span></span><div class="ss-title">Tezo · Process Analytics</div></div>
-            <div class="ss-body">
-              <div class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div>
-              <div class="ph-label">Screenshot placeholder</div>
-              <div class="ph-note">Drop the Analytics screenshot here (16:9).</div>
-            </div>
-          </div>
-          <div class="panel-desc"><h3>Analytics view</h3><p>Measure cycle times, bottlenecks, volumes, and process performance trends.</p></div>
-        </div>
+      </article>
+
+      <article class="case fade" data-t="pe" style="background:var(--lilac-25)">
+        <span class="meta">Bank · Compliance operations</span>
+        <h3>Compliance testing on a shared platform.</h3>
+        <p><b class="k">Challenge.</b> Manual spreadsheet checks fragmented testing and limited visibility.</p>
+        <p><b class="k">Engineering response.</b> Tezo built a cloud platform for workflows, records and audit logs.</p>
+        <div class="num" style="color:var(--blue)">75%<small>less time per compliance test run</small></div>
+        <details><summary>View engineering detail</summary><div class="detail"><p>Automated workflows centralized testing information and made status tracking easier. The platform uses ASP.NET Core, Azure, Power BI and Angular.</p></div></details>
+      </article>
+
+      <article class="case fade" data-t="pe" style="background:var(--beige-45)">
+        <span class="meta">Financial services · Application modernization</span>
+        <h3>Legacy desktop to API-driven web.</h3>
+        <p><b class="k">Challenge.</b> A C++ / MFC application constrained changes and scenario planning.</p>
+        <p><b class="k">Engineering response.</b> Tezo rebuilt it with APIs, role-based access, approvals and reporting.</p>
+        <div class="num" style="color:var(--red)">50%<small>faster processing</small></div>
+        <details><summary>View engineering detail</summary><div class="detail"><p>The modernized platform added scenario modelling, exports and transaction controls. The case study also reports 35% higher user efficiency.</p></div></details>
+      </article>
+
+      <article class="case fade" data-t="pe" style="background:var(--blue);color:#fff">
+        <span class="meta">Credit union · BAU support</span>
+        <h3>Support with clear service ownership.</h3>
+        <p><b class="k">Challenge.</b> Recurring tickets and manual maintenance strained the internal team.</p>
+        <p><b class="k">Engineering response.</b> Tezo introduced prioritized handling, service levels and an operations team.</p>
+        <div class="num" style="color:var(--lilac)">75%<small>less ticket resolution time</small></div>
+        <details><summary>View engineering detail</summary><div class="detail"><p>The engagement handled 200+ large tickets per month with 24/7 coverage. Support coverage and service levels for a new engagement are agreed separately.</p></div></details>
+      </article>
+
+      <article class="case fade" data-t="de" style="background:var(--white);border:1px solid var(--ink-12)">
+        <span class="meta">Bank · Data warehouse and analytics</span>
+        <h3>Banking data across 30+ systems.</h3>
+        <p><b class="k">Challenge.</b> Fragmented sources slowed reporting and access to consistent information.</p>
+        <p><b class="k">Engineering response.</b> Tezo implemented pipelines, data-vault models and reporting layers with access controls and lineage.</p>
+        <div class="num" style="color:var(--blue)">30+<small>systems connected to a shared data foundation</small></div>
+        <details><summary>View engineering detail</summary><div class="detail"><p>The platform handled 250+ GB daily, with data marts and semantic layers supporting reporting. The case study reports 50% of reports automated.</p></div></details>
+      </article>
+      <p class="note fade" style="grid-column:1/-1;color:var(--ink-60)">Results relate to the individual engagements described.</p>
+    </div>
+
+    <div class="sub-block">
+      <h2 class="fade">Ongoing engagements.</h2>
+      <div class="filters fade" data-for="ongoing">
+        <button class="tab active" data-f="all">All stories</button>
+        <button class="tab" data-f="pe">Product Engineering</button>
+        <button class="tab" data-f="de">Data Engineering</button>
+        <button class="tab" data-f="ai">AI &amp; governance</button>
+      </div>
+      <div class="ongoing" id="ongoing">
+        <article class="ong fade" data-t="pe">
+          <span class="meta">Bank · Integration and DevSecOps</span>
+          <h3>Digital integration and release controls.</h3>
+          <p>Discovery informed API-management and service designs, with testing, security checks, access controls and monitoring in the release path.</p>
+          <div class="focus">Engineering focus: a pilot application, API boundaries and reusable release controls.</div>
+          <details><summary>View engineering detail</summary><p>A pilot application anchors the transformation plan. API boundaries separate digital channels from underlying systems; reusable release controls can then extend across the estate.</p></details>
+        </article>
+        <article class="ong fade" data-t="de">
+          <span class="meta">Bank · Data lakehouse</span>
+          <h3>A reconciled banking-data foundation.</h3>
+          <p>The engagement defines a Fabric lakehouse with source mappings, quality checks, lineage and reconciliation across Bronze and Silver layers.</p>
+          <div class="focus">Scope focus: Bronze and Silver foundations; Gold products are design work in this phase.</div>
+          <details><summary>View engineering detail</summary><p>Customer 360 and analytical Gold products are being modelled and designed within the agreed scope. The phase focuses on the data foundation, with reporting and subsequent product builds addressed separately.</p></details>
+        </article>
+        <article class="ong fade" data-t="de">
+          <span class="meta">Insurance group · Data architecture</span>
+          <h3>Reusable data flows for insurance.</h3>
+          <p>The architecture brings policy, claims and customer data into a shared model, with repeatable ingestion, quality checks and lineage.</p>
+          <div class="focus">Engineering focus: shared data models, repeatable pipelines and migration planning.</div>
+          <details><summary>View engineering detail</summary><p>The approach connects existing sources to a lakehouse and analytics layer. Pipeline deployment, ownership and monitoring are part of the implementation plan.</p></details>
+        </article>
+        <article class="ong fade" data-t="ai">
+          <span class="meta">Insurance group · Customer and sales assistance</span>
+          <h3>Customer and sales-agent assistance.</h3>
+          <p>Customer assistance covers policy questions and renewals. Agent assistance supports customer lookup, quoting and case summaries within existing portals and CRM.</p>
+          <div class="focus">Use-case focus: policy and renewal support, agent assistance and human escalation.</div>
+          <details><summary>View engineering detail</summary><p>The approach uses existing knowledge and APIs, with human escalation for complex enquiries. Discovery establishes data access, response evaluation and the boundaries of each use case.</p></details>
+        </article>
+        <article class="ong gov fade" data-t="ai">
+          <span class="meta">GOVERNANCE FRAMEWORK · US bank · Model and GenAI governance</span>
+          <h3>Define how models are evaluated, approved and monitored.</h3>
+          <p>The governance framework connects sensitive-data protection, validation, human review and monitoring across the model lifecycle.</p>
+          <details><summary>View engineering detail</summary><p>It covers accuracy, hallucination, toxicity, bias, explainability and drift, with model and prompt version control. The framework defines the controls and evaluation approach; it does not establish production results.</p></details>
+        </article>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MICROSOFT -->
-<section id="microsoft">
+<!-- ================= WHY TEZO ================= -->
+<section class="sx s" id="why">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">Better Together</div>
-      <h2 class="title">Built for the Microsoft Cloud you already run</h2>
-      <p class="section-sub">Designed to work natively with the Microsoft ecosystem manufacturers already use.</p>
+    <div class="sec-head fade">
+      <span class="eyebrow"><i></i>Why Tezo</span>
+      <h2>Why Tezo?</h2>
     </div>
-    <div class="ms-band reveal">
-      <div class="eyebrow" style="margin-bottom:14px">Microsoft Technologies</div>
-      <div class="ms-logos">
-        <div class="ms-logo"><img src="1.png" alt="Azure"></div>
-        <div class="ms-logo"><img src="2.png" alt="Dynamics 365"></div>
-        <div class="ms-logo"><img src="3.png" alt="Power Platform"></div>
-        <div class="ms-logo"><img src="4.png" alt="Power BI"></div>
-        <div class="ms-logo"><img src="5.png" alt="Microsoft Teams"></div>
-        <div class="ms-logo"><img src="6.png" alt="Dataverse"></div>
-        <div class="ms-logo"><img src="7.png" alt="SharePoint"></div>
+    <div class="why">
+      <div class="card blue fade">
+        <span class="idx">01</span>
+        <div class="ph on-dark" data-img="why-1"><b>PLACEHOLDER</b><span>Icon 192×192 SVG</span></div>
+        <h3>Product-building experience.</h3>
+        <p>Our shared product-building heritage includes Keka. That experience shapes how we approach user workflows, release discipline, scale and the responsibility of running software.</p>
       </div>
-      <div class="why-matters">
-        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Faster implementation</div>
-        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>Lower integration risk</div>
-        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="M6 6.5h.01"/><path d="M9 6.5h.01"/></svg>Familiar user experience</div>
-        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Enterprise-grade security</div>
-        <div class="wm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>Scalable foundation for AI</div>
+      <div class="card lilac fade">
+        <span class="idx">02</span>
+        <div class="ph" data-img="why-2"><b>PLACEHOLDER</b><span>Icon 192×192 SVG</span></div>
+        <h3>Engineering across system boundaries.</h3>
+        <p>The client work connects core platforms, APIs, applications and data. We apply that experience to the interfaces and dependencies that determine whether a modernization effort works.</p>
+      </div>
+      <div class="card beige fade">
+        <span class="idx">03</span>
+        <div class="ph" data-img="why-3"><b>PLACEHOLDER</b><span>Icon 192×192 SVG</span></div>
+        <h3>Delivery with an operating plan.</h3>
+        <p>Release controls, service levels, runbooks and handover are part of the work described here. We define who owns the solution after launch, alongside what needs to be built.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- OUTCOMES -->
-<section id="outcomes" style="background:var(--bg-2);border-block:1px solid var(--border)">
+<!-- ================= APPROACH ================= -->
+<section class="sx s" id="approach">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">Business Outcomes</div>
-      <h2 class="title">Measurable impact across the operation</h2>
+    <div class="sec-head fade">
+      <span class="eyebrow"><i></i>Starting point</span>
+      <h2>A conversation first. An assessment by agreement.</h2>
     </div>
-    <div class="grid g-2">
-      <div class="outcome reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 12h8"/></svg></div>
-        <div><h3>Reduce manual effort</h3><p>Automate repetitive tasks and follow-ups.</p></div>
-      </div>
-      <div class="outcome reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
-        <div><h3>Improve process visibility</h3><p>Know what is happening, who owns it, and where delays exist.</p></div>
-      </div>
-      <div class="outcome reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-        <div><h3>Accelerate decisions</h3><p>Surface risks, exceptions, and next actions faster.</p></div>
-      </div>
-      <div class="outcome reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-        <div><h3>Strengthen accountability</h3><p>Create a clear audit trail across actions, approvals, and ownership.</p></div>
-      </div>
+    <div class="steps">
+      <div class="step fade"><span class="n">01</span><h3>Discuss the priority.</h3><p>Share the workflow, current constraints and the people involved. The introductory conversation helps establish whether a focused assessment is useful.</p></div>
+      <div class="step fade"><span class="n">02</span><h3>Agree the assessment.</h3><p>Confirm its scope, access requirements, deliverables, team, timing and fees before work begins. The assessment examines the systems and dependencies in that agreed scope.</p></div>
+      <div class="step fade"><span class="n">03</span><h3>Decide the first delivery.</h3><p>Review the findings, target design, backlog, measures and estimate. Agree any implementation as a separate commitment, with rollout and operational ownership defined.</p></div>
+    </div>
+    <div class="outputs fade">
+      <b>Outputs of an agreed assessment</b>
+      <span class="chip">Current-state findings</span><span class="chip">Target design</span><span class="chip">First-release scope</span><span class="chip">Measures and estimate</span><span class="chip">Ownership plan</span>
     </div>
   </div>
 </section>
 
-<!-- WHY TEZO -->
-<section id="why">
+<!-- ================= CTA ================= -->
+<section class="sx s" id="start">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">Why Tezo</div>
-      <h2 class="title">Manufacturing automation, done right</h2>
-    </div>
-    <div class="why-list">
-      <div class="why-item reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.3 7L12 12l8.7-5M12 22V12"/></svg></div>
-        <span>Manufacturing-focused automation accelerators</span>
-      </div>
-      <div class="why-item reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
-        <span>Microsoft-native architecture</span>
-      </div>
-      <div class="why-item reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3 3 3 0 0 0-3 4 3 3 0 0 0 0 6 3 3 0 0 0 3 4 3 3 0 0 0 6 0 3 3 0 0 0 3-4 3 3 0 0 0 0-6 3 3 0 0 0-3-4 3 3 0 0 0-3-3zM12 5v14"/></svg></div>
-        <span>AI-enabled workflow intelligence</span>
-      </div>
-      <div class="why-item reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/></svg></div>
-        <span>Integration-first approach — no rip and replace</span>
-      </div>
-      <div class="why-item reveal">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></svg></div>
-        <span>Flexible rollout across plants, teams, and processes</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA BAND -->
-<section style="padding-top:40px">
-  <div class="wrap">
-    <div class="cta-band reveal">
-      <div class="eyebrow" style="justify-content:center">Get Started</div>
-      <h2>Ready to modernize manufacturing operations?</h2>
-      <p>Start with one high-impact workflow. Prove value quickly. Scale across your manufacturing enterprise.</p>
-      <div class="hero-cta">
-        <a href="#contact" class="btn btn-primary">Request a Demo
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="https://www.tezo.com/contact-us" class="btn btn-ghost">Contact Us</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" style="padding-top:60px">
-  <div class="wrap">
-    <div class="form-wrap">
-      <div class="reveal">
-        <div class="eyebrow">Let's Talk</div>
-        <h2 class="title">Tell us about your operation</h2>
-        <p class="section-sub">Share a few details and our team will show you how AI-powered process automation can drive measurable results.</p>
-        <div class="contact-points">
-          <div class="cp">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-            <div><h4>Talk to an expert</h4><p>Get a tailored walkthrough for your workflows.</p></div>
-          </div>
-          <div class="cp">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM22 6l-10 7L2 6"/></svg></div>
-            <div><h4>Prefer email?</h4><p>Reach us anytime and we'll respond within one business day.</p></div>
-          </div>
-          <div class="cp">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11a8 8 0 1 0-16 0c0 6.5 8 11 8 11z"/><circle cx="12" cy="11" r="3"/></svg></div>
-            <div><h4>Built for global teams</h4><p>Rollout support across plants and regions.</p></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card reveal">
-        <form id="leadForm" novalidate>
+    <div class="cta-band fade">
+      <div class="art"><div class="ph on-dark" data-img="cta-visual"><b>PLACEHOLDER · CTA visual</b><span>1200×800 WebP/PNG (like BloomFi's cta-bars-2x.webp). Idea: rising bars or soft gradient shapes in Lilac, Red and Beige on Black.</span></div></div>
+      <div class="cta-inner">
+        <span class="eyebrow"><i></i>Your first modernization priority</span>
+        <h2>Start with your modernization priority.</h2>
+        <p class="d">Choose an application, integration, operational process or data use case. Use the first conversation to discuss the problem, the stakeholders and whether an assessment would help.</p>
+        <div class="agenda">
+          <label for="prio">What would you like to address?</label>
+          <select id="prio">
+            <option>Modernize a critical application</option>
+            <option>Connect systems and digital channels</option>
+            <option>Modernize merger and account workflows</option>
+            <option>Improve release quality and controls</option>
+            <option>Strengthen ongoing support</option>
+            <option>Build a trusted data foundation</option>
+            <option>Assess a governed AI use case</option>
+          </select>
           <div class="row">
-            <div class="field">
-              <label>Name <span class="req">*</span></label>
-              <input type="text" name="name" required placeholder="Your full name">
-            </div>
-            <div class="field">
-              <label>Business Email <span class="req">*</span></label>
-              <input type="email" name="email" required placeholder="you@company.com">
-            </div>
+            <button class="btn btn-light" id="copyBtn">Copy discussion agenda
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M9 3l5 5-5 5"/></svg></button>
+            <span class="done" id="copyDone"></span>
           </div>
-          <div class="row">
-            <div class="field">
-              <label>Company</label>
-              <input type="text" name="company" placeholder="Company name">
-            </div>
-            <div class="field">
-              <label>Job Title</label>
-              <input type="text" name="title" placeholder="Your role">
-            </div>
-          </div>
-          <div class="field">
-            <label>Area of Interest</label>
-            <select name="interest">
-              <option value="">Select an area</option>
-              <option>Production workflows</option>
-              <option>Quality processes</option>
-              <option>Maintenance requests</option>
-              <option>Operations exceptions</option>
-              <option>Analytics &amp; reporting</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Message</label>
-            <textarea name="message" placeholder="What would you like to automate?"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Request a Demo
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </form>
-        <div class="form-success" id="formSuccess">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3"/></svg>
-          <h3>Thanks — we've got it.</h3>
-          <p>Our team will reach out shortly to schedule your demo.</p>
+          <p class="fine">Use the brief as a discussion agenda with your Tezo contact. Any assessment scope, deliverables, timing and fees are agreed separately.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
+<div class="sx end"></div>
+</main>
+
 
 <script>
-  // tab gallery
-  const tabs = document.querySelectorAll('#tabs .tab');
-  const panels = document.querySelectorAll('#panels .panel');
-  tabs.forEach(t=>t.addEventListener('click',()=>{
-    const i = t.dataset.i;
-    tabs.forEach(x=>x.classList.remove('active'));
-    panels.forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    panels[i].classList.add('active');
-  }));
 
-  // scroll reveal
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
-  },{threshold:0.12});
-  document.querySelectorAll('.reveal').forEach((el,idx)=>{
-    el.style.transitionDelay = (idx % 4 * 0.06) + 's';
-    io.observe(el);
-  });
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // hero load
-  window.addEventListener('load',()=>{
-    document.querySelectorAll('.hero .reveal').forEach((el,i)=>{
-      setTimeout(()=>el.classList.add('in'), 120 + i*110);
+  /* headline: word-by-word blur-in (keeps the red span intact) */
+  var h=document.querySelector('.hero h1'),n=0;
+  function split(src,dst){
+    Array.from(src.childNodes).forEach(function(nd){
+      if(nd.nodeType===3){
+        var ws=nd.textContent.trim().split(/\s+/).filter(Boolean);
+        ws.forEach(function(w,k){
+          var s=document.createElement('span');s.className='hw';s.setAttribute('aria-hidden','true');s.style.setProperty('--i',n++);s.textContent=w;
+          dst.appendChild(s);if(k<ws.length-1)dst.appendChild(document.createTextNode(' '));
+        });
+        if(/\s$/.test(nd.textContent))dst.appendChild(document.createTextNode(' '));
+      }else if(nd.nodeName==='BR'){dst.appendChild(nd.cloneNode());}
+      else{var c=nd.cloneNode(false);split(nd,c);dst.appendChild(c);}
+    });
+  }
+  var frag=document.createDocumentFragment();split(h,frag);h.textContent='';h.appendChild(frag);
+
+  /* letter-roll buttons */
+  document.querySelectorAll('[data-roll]').forEach(function(el){
+    var t=el.textContent;el.setAttribute('aria-label',t);el.textContent='';
+    Array.from(t).forEach(function(c,i){
+      var w=document.createElement('span');w.className='ch';w.setAttribute('aria-hidden','true');w.style.setProperty('--i',i);
+      for(var k=0;k<2;k++){var s=document.createElement('span');s.textContent=c===' '?'\u00A0':c;w.appendChild(s);}
+      el.appendChild(w);
     });
   });
 
-  // form
-  document.getElementById('leadForm').addEventListener('submit',function(e){
-    e.preventDefault();
-    if(!this.checkValidity()){ this.reportValidity(); return; }
-    this.style.display='none';
-    document.getElementById('formSuccess').style.display='block';
+  /* stats count up */
+  var nums=[].slice.call(document.querySelectorAll('[data-count]'));
+  if(!reduce){
+    nums.forEach(function(x){x.textContent='0'+x.dataset.suffix;});
+    var t0=null,delay=900,dur=1500;
+    (function tick(now){
+      if(t0===null)t0=now;
+      var p=Math.min(Math.max((now-t0-delay)/dur,0),1),e=1-Math.pow(1-p,3);
+      nums.forEach(function(x){x.textContent=Math.round(+x.dataset.count*e)+x.dataset.suffix;});
+      if(p<1)requestAnimationFrame(tick);
+    })(performance.now());
+  }
+
+  /* cursor light behind the bank + red edge light on the bank */
+  var hero=document.getElementById('hero'),glow=hero.querySelector('.glow'),bank=document.getElementById('bank'),
+      layers=[].slice.call(hero.querySelectorAll('.layer[data-depth]')),
+      /* roofline of the bank image as [x, y] fractions of its width / height. Tune against the final PNG. */
+      ROOF=[[0,.52],[.263,.2],[.30,.2],[.5,0],[.70,.2],[.737,.2],[1,.52]],
+      IDLE_RIM=.45,                /* how lit the red windows are when the cursor is idle */
+      B={x:0,y:0,w:1,h:1},rest={x:0,y:0},inited=false,lastInput=-1e9,rimA=IDLE_RIM,cur={x:0,y:0},tgt={x:0,y:0};
+
+  var ringEl=hero.querySelector('.ring circle'),linkG=[].slice.call(hero.querySelectorAll('.links g')),floatEls=[].slice.call(hero.querySelectorAll('.float')),
+      ANG=[-28.4,28.4,-46.4],   /* where each card's node sits on the dotted circle (degrees from the top) */
+      statsEl=hero.querySelector('.stats'),GAP=36,   /* min distance between the stats pill and the dotted circle */
+      RC={x:0,y:0,r:0};
+  function geo(){               /* dotted circle: centred on the bank, apex just above the pediment */
+    RC.r=.407*B.w;RC.x=B.x+B.w/2;
+    var pillBottom=statsEl.getBoundingClientRect().bottom-hero.getBoundingClientRect().top,
+        apex=Math.max(B.y-.01*B.w,pillBottom+GAP);
+    RC.y=apex+RC.r;
+    ringEl.setAttribute('cx',RC.x);ringEl.setAttribute('cy',RC.y);ringEl.setAttribute('r',RC.r);
+  }
+  function drawLinks(){         /* dotted line: icon rim -> node on the circle (follows the floating motion) */
+    if(innerWidth<=1100)return;
+    var hr=hero.getBoundingClientRect();
+    floatEls.forEach(function(f,i){
+      var ic=f.querySelector('.hico').getBoundingClientRect(),rad=ic.width/2,
+          cx=ic.left-hr.left+rad,cy=ic.top-hr.top+rad,side=(i===1)?-1:1,
+          sx=cx+side*rad,sy=cy,a=ANG[i]*Math.PI/180,
+          nx=RC.x+RC.r*Math.sin(a),ny=RC.y-RC.r*Math.cos(a),
+          qx=sx+(nx-sx)*.62,qy=sy-4,p=linkG[i].children;
+      p[0].setAttribute('d','M'+sx+' '+sy+' Q'+qx+' '+qy+' '+nx+' '+ny);
+      p[1].setAttribute('cx',sx);p[1].setAttribute('cy',sy);
+      p[2].setAttribute('cx',nx);p[2].setAttribute('cy',ny);
+    });
+  }
+  function measure(){
+    var hr=hero.getBoundingClientRect(),br=bank.getBoundingClientRect();
+    B={x:br.left-hr.left,y:br.top-hr.top,w:br.width,h:br.height};
+    rest={x:B.w/2,y:B.h*.55};
+    if(!inited){cur.x=tgt.x=rest.x;cur.y=tgt.y=rest.y;inited=true;}
+    geo();
+  }
+  function roof(x){
+    var u=x/B.w;
+    for(var i=1;i<ROOF.length;i++){
+      if(u<=ROOF[i][0]){var a=ROOF[i-1],b=ROOF[i],t=(u-a[0])/((b[0]-a[0])||1);return (a[1]+(b[1]-a[1])*t)*B.h;}
+    }
+    return ROOF[ROOF.length-1][1]*B.h;
+  }
+  function clampY(x,y){return Math.min(Math.max(y,roof(x)+B.h*.1),B.h*.88);}
+  function render(){
+    cur.y=clampY(cur.x,cur.y);
+    glow.style.transform='translate3d('+(B.x+cur.x-glow.offsetWidth/2)+'px,'+(B.y+cur.y-glow.offsetHeight/2)+'px,0)';
+    bank.style.setProperty('--rx',cur.x+'px');bank.style.setProperty('--ry',cur.y+'px');
+    var nx=cur.x/B.w-.5,ny=cur.y/B.h-.5;
+    layers.forEach(function(el){var d=+el.dataset.depth;if(d)el.style.transform='translate3d('+(-nx*d)+'px,'+(-ny*d*.6)+'px,0)';});
+    drawLinks();
+  }
+  var vid=hero.querySelector('video');if(reduce&&vid)vid.pause();
+  measure();
+  addEventListener('load',function(){measure();render();});
+  addEventListener('resize',function(){measure();if(reduce){cur.x=rest.x;cur.y=rest.y;render();}});
+  if(reduce){cur.x=rest.x;cur.y=rest.y;render();return;}
+
+  addEventListener('pointermove',function(e){
+    if(e.pointerType==='touch')return;
+    var br=bank.getBoundingClientRect();
+    tgt.x=Math.min(Math.max(e.clientX-br.left,0),B.w);tgt.y=clampY(tgt.x,e.clientY-br.top);
+    lastInput=performance.now();
+  },{passive:true});
+  document.documentElement.addEventListener('mouseleave',function(){lastInput=-1e9;});
+
+  (function frame(now){
+    var active=now-lastInput<3500;
+    if(!active){tgt.x=rest.x;tgt.y=rest.y;}
+    rimA+=((active?1:IDLE_RIM)-rimA)*.06;bank.style.setProperty('--rim-a',rimA.toFixed(3));
+    cur.x+=(tgt.x-cur.x)*.06;cur.y+=(tgt.y-cur.y)*.06;
+    render();requestAnimationFrame(frame);
+  })(performance.now());
+})();
+
+</script>
+<script>
+
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+
+  /* ---------- Scroll statement: progressive word fill; keyword chips wipe to black with white text ---------- */
+  var ICONS={
+    'statement-platforms':'<svg viewBox="0 0 64 64" fill="#000"><rect x="14" y="12" width="36" height="10"/><rect x="14" y="27" width="36" height="10"/><rect x="14" y="42" width="36" height="10"/><rect x="20" y="15.5" width="6" height="3" fill="#a995f8"/><rect x="20" y="30.5" width="6" height="3" fill="#a995f8"/><rect x="20" y="45.5" width="6" height="3" fill="#a995f8"/></svg>',
+    'statement-applications':'<svg viewBox="0 0 64 64" fill="#000"><rect x="12" y="14" width="40" height="36"/><rect x="12" y="14" width="40" height="9"/><rect x="16" y="17" width="3" height="3" fill="#ec85f7"/><rect x="21" y="17" width="3" height="3" fill="#ec85f7"/><path d="M24 36l6 6 11-12" fill="none" stroke="#ec85f7" stroke-width="4" stroke-linecap="square"/></svg>',
+    'statement-automate':'<svg viewBox="0 0 64 64" fill="#000"><path d="M36 9L16 35h13l-4 20 23-28H34z"/><rect x="31" y="31" width="5" height="4" fill="#f8d9a4"/></svg>'
+  };
+  var TILE={'statement-platforms':'t1','statement-applications':'t2','statement-automate':'t3'};
+  function build(node,target){
+    var words=[],kids=Array.prototype.slice.call(node.childNodes);
+    node.innerHTML='';
+    kids.forEach(function(k){
+      if(k.nodeType===3){
+        k.textContent.trim().split(/\s+/).forEach(function(w){
+          if(!w)return;
+          var s=document.createElement('span');s.className='w';s.textContent=w;
+          node.appendChild(s);node.appendChild(document.createTextNode(' '));
+          words.push({el:s,kw:false,target:target});
+        });
+      }else if(k.classList&&k.classList.contains('kw')){
+        var key=k.getAttribute('data-img'),s=document.createElement('span');s.className='w kw';
+        var chip=document.createElement('span');chip.className="kwc";
+        var ico=document.createElement('span');ico.className='ico '+(TILE[key]||'t1');
+        ico.setAttribute('data-img',key);ico.innerHTML=ICONS[key]||'';
+        var lbl=document.createElement('span');lbl.className='lbl';lbl.textContent=k.textContent;
+        chip.appendChild(ico);chip.appendChild(lbl);s.appendChild(chip);
+        var after=k.getAttribute('data-after');
+        if(after){var pn=document.createElement('span');pn.className='pn';pn.textContent=after;s.appendChild(pn);}
+        node.appendChild(s);node.appendChild(document.createTextNode(' '));
+        words.push({el:s,kw:true,target:target});
+      }
+    });
+    return words;
+  }
+  var allWords=build(document.getElementById('revealMain'),[30,30,30,1]).concat(build(document.getElementById('revealSub'),[30,30,30,.62]));
+  var statement=document.getElementById('statement'),prog=document.getElementById('prog');
+  function onScroll(){
+    var r=statement.getBoundingClientRect();
+    var total=statement.offsetHeight-window.innerHeight;
+    var p=reduce?1:clamp(-r.top/total,0,1);
+    var tp=clamp((p-.06)/.8,0,1)*allWords.length;
+    allWords.forEach(function(w,i){
+      var f=clamp(tp-i,0,1);
+      if(w.kw){w.el.classList.toggle('on',f>=.5);var pn=w.el.querySelector('.pn');if(pn)pn.style.color='rgba(30,30,30,'+(.16+.84*f).toFixed(3)+')';}
+      else{var a=.16+(w.target[3]-.16)*f;w.el.style.color='rgba(30,30,30,'+a.toFixed(3)+')';}
+    });
+    prog.style.width=(p*100)+'%';
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+
+  /* ---------- Placeholders: drop images/<name>.svg|webp|png|jpg and it replaces the box ---------- */
+  var EXTS=['svg','webp','png','gif','jpg','jpeg'];
+  function loadInto(el){
+    var name=el.getAttribute('data-img');if(!name)return;
+    if(el.classList.contains('ph')){
+      var f=document.createElement('span');f.className='fn';
+      f.textContent='images/'+name+'.'+(el.getAttribute('data-ext')||'svg (or .webp / .png / .jpg)');
+      el.appendChild(f);
+    }
+    var i=0,list=el.getAttribute('data-ext')?[el.getAttribute('data-ext')]:EXTS;
+    (function next(){
+      if(i>=list.length)return;
+      var im=new Image();
+      im.onload=function(){el.classList.add('has-img');el.innerHTML='';im.alt='';el.appendChild(im)};
+      im.onerror=next;
+      im.src='images/'+name+'.'+list[i++];
+    })();
+  }
+  document.querySelectorAll('[data-img]').forEach(loadInto);
+
+  /* ---------- Reveal on scroll ---------- */
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.fade').forEach(function(n,i){n.style.transitionDelay=((i%3)*70)+'ms';io.observe(n)});
+
+  /* ---------- Persona tabs ---------- */
+  var ptabs=document.querySelectorAll('.tabs .tab'),pans=document.querySelectorAll('.persona');
+  ptabs.forEach(function(t){t.addEventListener('click',function(){
+    ptabs.forEach(function(x){x.classList.toggle('active',x===t)});
+    pans.forEach(function(p){
+      var on=p.dataset.p===t.dataset.p;
+      p.classList.toggle('active',on);
+      if(on)p.classList.add('in');
+    });
+  })});
+
+  /* ---------- Filters ---------- */
+  document.querySelectorAll('.filters').forEach(function(f){
+    var target=document.getElementById(f.dataset.for);
+    var btns=f.querySelectorAll('.tab');
+    btns.forEach(function(b){b.addEventListener('click',function(){
+      btns.forEach(function(x){x.classList.toggle('active',x===b)});
+      target.querySelectorAll('[data-t]').forEach(function(c){
+        c.classList.toggle('hide',b.dataset.f!=='all'&&c.dataset.t!==b.dataset.f);
+      });
+    })});
   });
+
+  /* ---------- Copy agenda ---------- */
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    var pr=document.getElementById('prio').value;
+    var txt='Tezo discussion agenda\n\nPriority: '+pr+'\n\n1. The workflow, current constraints and the people involved\n2. Systems and dependencies in scope\n3. Whether a focused assessment would help (scope, deliverables, timing and fees agreed separately)';
+    var d=document.getElementById('copyDone');
+    function ok(){d.textContent='Copied. Share it with your Tezo contact.'}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){d.textContent='Copy failed. Please select the text manually.'})}
+    else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){d.textContent='Copy failed.'}document.body.removeChild(ta)}
+  });
+})();
+
 </script>
 </body>
 </html>
